@@ -1,2 +1,2 @@
-# backend
-HouseFInder backend
+# Housefinder - backend
+HouseFinder backend, API
