@@ -25,7 +25,6 @@ const login = async (req, res) => {
 	if (user.password != hash) {
 		return res.status(401).json({ success: false, message: 'Authentication failed. Wrong password.' });
 	}
-
 	// if user is found and password is right create a token
 	var payload = {
 		email: user.email,
@@ -39,7 +38,9 @@ const login = async (req, res) => {
 	return res.status(200).json({
 		success: true,
 		message: 'Enjoy your token!',
-		token: token
+		token: token,
+		nome: user.nome,
+		cognome: user.cognome
 	});
 };
 
@@ -84,9 +85,7 @@ const signup = async (req, res) => {
 	});
 };
 
-const logout = (req, res) => {
-	// TODO
-};
+const logout = (req, res) => { };
 
 module.exports = {
 	login: login,
