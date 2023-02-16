@@ -39,6 +39,7 @@ const login = async (req, res) => {
 		success: true,
 		message: 'Enjoy your token!',
 		token: token,
+		id: user.id,
 		nome: user.nome,
 		cognome: user.cognome
 	});
