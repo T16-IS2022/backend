@@ -86,10 +86,31 @@ const signup = async (req, res) => {
 	});
 };
 
-const logout = (req, res) => { };
+const logout = (req, res) => { 
+	/* non dovendo fare operazioni sul backend, il logout è implementato nel frontend,
+	 * ossia in /views/LogoutView.vue
+	 */
+};
+
+const deleteUtente = (req, res) => {
+    console.log("Deleting user: ", req.body.userId);
+
+    Utente.findOneAndDelete({ _id: req.body.userId }, (err, data) => {
+        if (err) {
+            return res.status(500).json({ Error: err });
+        }
+        else if (data) {
+            return res.status(204).json({ message: "User deleted" });
+        } else {
+            // if user is not found return 404 error
+            return res.status(404).json({ message: "User not found" });
+        }
+    })
+};
 
 module.exports = {
 	login: login,
 	signup: signup, 
-	logout: logout
+	logout: logout,
+	deleteUtente: deleteUtente
 };

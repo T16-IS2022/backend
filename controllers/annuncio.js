@@ -4,18 +4,20 @@ const Locale = require('../models/locale');
 
 const publish = async (req, res) => {
 	// create a new ad
+	var scadenza_vetrina = new Date();
+	scadenza_vetrina.setDate(scadenza_vetrina.getDate() + parseInt(req.body.durata_vetrina));
 	const nuovoAnnuncio = new Annuncio({
 		foto: req.body.foto,
 		numero_bagni: req.body.numero_bagni,
 		numero_locali: req.body.numero_locali,
-		locali: null,
+		locali: req.body.locali,
 		prezzo: req.body.prezzo,
 		classe_energetica: req.body.classe_energetica,
 		indirizzo: req.body.indirizzo,
-		arredato: null,
+		arredato: req.body.arredato,
 		vetrina: {
 			data_inizio: new Date(),
-			data_fine: null
+			data_fine: scadenza_vetrina
     	}
 	});
 
