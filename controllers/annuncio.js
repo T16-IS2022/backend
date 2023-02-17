@@ -11,6 +11,7 @@ const publish = async (req, res) => {
 		numero_bagni: req.body.numero_bagni,
 		numero_locali: req.body.numero_locali,
 		locali: req.body.locali,
+		superficie_tot: req.body.superficie,
 		prezzo: req.body.prezzo,
 		classe_energetica: req.body.classe_energetica,
 		indirizzo: req.body.indirizzo,
@@ -35,6 +36,22 @@ const publish = async (req, res) => {
 	await utente.save();
 }
 
+const getAnnunci = async (req, res) => {
+	await Annuncio.find({ }).exec().then((result) => {
+		annunci = result;
+	}).catch((err) => {
+		return res.status(500).json({ Error: "Internal server error: " + err });
+	});
+
+	if (!annunci) {
+		res.status(404).json({ success: false, message: 'Ads not found.' });
+		return;
+	}
+
+	return res.status(200).json({ success: true, annunci: annunci });
+};
+
 module.exports = {
-	publish: publish
+	publish: publish,
+	getAnnunci: getAnnunci
 };

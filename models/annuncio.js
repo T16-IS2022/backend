@@ -3,6 +3,7 @@ const LocaleSchema = require('./locale');
 
 const AnnuncioSchema = new mongoose.Schema({
     foto: [String],
+    superficie_tot: Number,
     numero_bagni: Number,
     numero_locali: Number,
     locali: [LocaleSchema.schema],

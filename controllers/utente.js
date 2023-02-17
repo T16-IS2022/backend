@@ -8,18 +8,15 @@ const login = async (req, res) => {
 		return res.status(400).json({ success: false, message: 'Please, pass an email, password.' });
 	}
 	
-	// find the user
 	let user = await Utente.findOne({ email: req.body.email }).exec().catch((err) => {
 		return res.status(500).json({ Error: "Internal server error: " + err });
 	});
 
-	// user not found
 	if (!user) {
 		console.log("User not found");
 		return res.status(404).json({ success: false, message: 'Authentication failed. User not found.' });
 	}
 
-	// check if password hashes match
 	let hash = crypto.createHash('sha256').update(req.body.password).digest('hex');
 
 	if (user.password != hash) {
@@ -30,9 +27,11 @@ const login = async (req, res) => {
 		email: user.email,
 		id: user._id	
 	}
+
 	var options = {
 		expiresIn: 86400 // expires in 24 hours
 	}
+
 	var token = jwt.sign(payload, process.env.SUPER_SECRET, options);
 
 	return res.status(200).json({
@@ -77,7 +76,6 @@ const signup = async (req, res) => {
 		ricerche_salvate: []
 	});
 
-	// save the user
 	nuovoUtente.save((err) => {
 		if (err) {
 			return res.status(500).json({ Error: "Internal server error: " + err });

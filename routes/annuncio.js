@@ -6,4 +6,6 @@ const tokenChecker = require('../middleware/tokenChecker'); //import tokenChecke
 
 router.post('/annuncio/pubblica', tokenChecker, annuncioController.publish);
 
+router.get('/annuncio/list', annuncioController.getAnnunci);
+
 module.exports = router; // export to use in server.js
