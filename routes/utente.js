@@ -8,9 +8,10 @@ router.post('/utente/signup', utenteController.signup);
 
 router.post('/utente/login', utenteController.login);
 
+router.get('/utente/annunci-pubblicati', tokenChecker, utenteController.getAnnunciPubblicati);
+
 router.get('/utente/logout', tokenChecker, utenteController.logout);
 
-router.delete('/utente/cancella', tokenChecker, utenteController.deleteUtente);
-
+router.delete('/utente/cancella', tokenChecker, utenteController.deleteUtente); 
 
 module.exports = router; // export to use in server.js

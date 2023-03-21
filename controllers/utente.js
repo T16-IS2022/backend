@@ -1,4 +1,5 @@
 const Utente = require('../models/utente'); // get our mongoose model
+const Annuncio = require('../models/annuncio'); // get our mongoose model
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 const crypto = require('crypto');
 
@@ -104,11 +105,64 @@ const deleteUtente = (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
     })
+
+	//TO-DO Cancellare gli annunci dell'utente
+};
+
+const getAnnunciPubblicati = async (req, res) => {
+	userId = req.loggedUser.id;
+
+	if (!userId) {
+		res.status(401).json({ success: false, message: 'Unauthorized.' });
+		return;
+	}
+
+	let profile;
+	await Utente.findOne({ _id: userId }).exec().then((result) => {
+		profile = result;
+	}).catch((err) => {
+		return res.status(500).json({ Error: "Internal server error: " + err });
+	});
+
+	if (!profile) {
+		res.status(404).json({ success: false, message: 'User not found.' });
+		return;
+	}
+
+	const annunci = await Annuncio.find({ _id: { $in: profile.annunci_pubblicati } });
+
+	return res.status(200).json({ success: true, annunci_pubblicati: annunci });
+};
+
+const getAnnunciSalvati = async (req, res) => {
+	userId = req.loggedUser.id;
+
+	if (!userId) {
+		res.status(401).json({ success: false, message: 'Unauthorized.' });
+		return;
+	}
+
+	let profile;
+	await Utente.findOne({ _id: userId }).exec().then((result) => {
+		profile = result;
+	}).catch((err) => {
+		return res.status(500).json({ Error: "Internal server error: " + err });
+	});
+
+	if (!profile) {
+		res.status(404).json({ success: false, message: 'User not found.' });
+		return;
+	}
+
+	const annunci = await Annuncio.find({ _id: { $in: profile.annunci_salvati } });
+
+	return res.status(200).json({ success: true, annunci_salvati: annunci });
 };
 
 module.exports = {
 	login: login,
 	signup: signup, 
 	logout: logout,
-	deleteUtente: deleteUtente
+	deleteUtente: deleteUtente,
+	getAnnunciPubblicati: getAnnunciPubblicati
 };
