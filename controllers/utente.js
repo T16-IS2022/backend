@@ -164,5 +164,6 @@ module.exports = {
 	signup: signup, 
 	logout: logout,
 	deleteUtente: deleteUtente,
-	getAnnunciPubblicati: getAnnunciPubblicati
+	getAnnunciPubblicati: getAnnunciPubblicati,
+	getAnnunciSalvati: getAnnunciSalvati
 };

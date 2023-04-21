@@ -6,10 +6,14 @@ const tokenChecker = require('../middleware/tokenChecker'); //import tokenChecke
 
 router.get('/annuncio/list', annuncioController.getAnnunci);
 
-router.get('/annuncio/:id/info', annuncioController.getAnnuncio);
+router.get('/annuncio/:id', annuncioController.getAnnuncio);
+
+router.delete('/annuncio/:id', tokenChecker, annuncioController.deleteAnnuncio);
 
 router.post('/annuncio/pubblica', tokenChecker, annuncioController.publish);
 
-router.delete('/annuncio/:id', tokenChecker, annuncioController.deleteAnnuncio);
+router.get('/annuncio/:id/salva', tokenChecker, annuncioController.saveAnnuncio);
+
+router.delete('/annuncio/:id/salva', tokenChecker, annuncioController.deleteSavedAnnuncio);
 
 module.exports = router; // export to use in server.js

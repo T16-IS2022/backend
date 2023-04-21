@@ -75,18 +75,15 @@ const deleteAnnuncio = (req, res) => {
 
     Annuncio.findOneAndDelete({ _id: req.params.id }, (err, data) => {
         if (err) {
-            res.status(500).json({ Error: err });
-            return;
+            return res.status(500).json({ Error: err });
         }
         if (data) {
             // delete ad name from user in the db
             Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $pull: { annunci_salvati: req.params.id } }, (err, data) => {
                 if (err) {
-                    res.status(500).json({ Error: err });
-                    return;
+                    return res.status(500).json({ Error: err });
                 }
             });
-
             return res.status(204).json({ message: "Ad deleted" });
         } else {
             // if ad not found return 404 error
@@ -95,9 +92,43 @@ const deleteAnnuncio = (req, res) => {
     })
 };
 
+const saveAnnuncio = async (req, res) => {
+	let utente;
+	await Utente.findById(req.loggedUser.id).exec().then((result) => {
+		utente = result;
+	}).catch((err) => {
+		return res.status(500).json({ Error: "Internal server error: " + err });
+	});
+
+	if (!utente)
+		return res.status(404).json({ success: false, message: 'User not found.' });
+
+	utente.annunci_salvati.push(req.params.id);
+	await utente.save();
+	return res.status(200).json({ success: true, message: 'Ad saved' });
+}
+
+const deleteSavedAnnuncio = async (req, res) => {
+    let utente;
+	await Utente.findById(req.loggedUser.id).exec().then((result) => {
+		utente = result;
+	}).catch((err) => {
+		return res.status(500).json({ Error: "Internal server error: " + err });
+	});
+
+	if (!utente)
+		return res.status(404).json({ success: false, message: 'User not found.' });
+
+	utente.annunci_salvati.pull(req.params.id);
+	await utente.save();
+	return res.status(200).json({ success: true, message: 'Ad removed correctly.' });
+};
+
 module.exports = {
 	publish: publish,
 	getAnnunci: getAnnunci,
 	getAnnuncio: getAnnuncio,
-	deleteAnnuncio: deleteAnnuncio
+	deleteAnnuncio: deleteAnnuncio,
+	saveAnnuncio: saveAnnuncio,
+	deleteSavedAnnuncio: deleteSavedAnnuncio
 };
