@@ -1,0 +1,159 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "HouseFinder API",
+    "description": "HouseFinder API"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "tags":[ {
+    "name": "utente",
+    "description": "API per l'utente"
+  },
+  {
+    "name": "annuncio",
+    "description": "API per il robot"
+  }],
+  "schemes": ["http"],
+  "securityDefinitions": {
+    "jwt": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "x-access-token"
+    }
+  },
+  "paths": {
+    "/utente/signup": {
+        "post": {
+          "tags": ["utente"],
+          "summary": "Registrazione utente",
+          "description": "Registra un nuovo utente",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Utente da registrare",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/signup_body"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "User created successfully"
+            },
+            "400": {
+              "description": "Please, pass a username, password, email and phone number."
+            },
+            "409": {
+              "description": "Username already taken."
+            },
+            "500": {
+              "description": "Internal server error."
+            }
+          }
+        }
+    },
+    "/utente/login": {     
+      "post": {
+        "tags": ["utente"],
+        "summary": "login",
+        "description": "Effettua il login",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Utente da registrare",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/login_body"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Enjoy your token!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "token": {
+                      "type": "string"
+                    }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Please, pass a username, password."
+          },
+          "401": {
+            "description": "Authentication failed. Wrong password."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/utente/logout": {
+      "get": {
+        "tags": ["utente"],
+        "summary": "Logout",
+        "description": "Effettua il logout",
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
+          },
+          "401": {
+            "description": "User not logged in"
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "utente": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "numero_tel": {
+          "type": "string"
+        },
+        "hash_password": {
+          "type": "string"
+        },
+        "ruolo": {
+          "type": "string"
+        },
+        "nomi_organizzazioni": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

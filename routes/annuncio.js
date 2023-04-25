@@ -10,10 +10,10 @@ router.get('/annuncio/:id', annuncioController.getAnnuncio);
 
 router.delete('/annuncio/:id', tokenChecker, annuncioController.deleteAnnuncio);
 
-router.post('/annuncio/pubblica', tokenChecker, annuncioController.publish);
+router.post('/annuncio/pubblica', tokenChecker, annuncioController.addAnnuncio);
 
 router.get('/annuncio/:id/salva', tokenChecker, annuncioController.saveAnnuncio);
 
-router.delete('/annuncio/:id/salva', tokenChecker, annuncioController.deleteSavedAnnuncio);
+router.delete('/annuncio/:id/salva', tokenChecker, annuncioController.deleteAnnuncioSalvato);
 
 module.exports = router; // export to use in server.js
