@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const FiltroSchema = new Schema({
-    nome_filtro: { type: String, required: true },
-    min: { type: Number, required: true },
-    max: { type: Number, required: true }
+    nome_filtro: String,
+    min: Number,
+    max: Number
 });
 
-const Filtro = mongoose.model('Filtro', FiltroSchema); //convert to model named Filtro
-module.exports = Filtro; //export for controller use
+const Filtro = mongoose.model('Filtro', FiltroSchema);
+module.exports = Filtro;
