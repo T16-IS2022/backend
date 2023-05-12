@@ -7,5 +7,5 @@ const ChatSchema = new Schema({
     messaggi: [{ type: Schema.Types.ObjectId, ref: "Message" }]
 });
 
-const Chat = mongoose.model('Chat', ChatSchema); //convert to model named Chat
-module.exports = Chat; //export for controller use
+const Chat = mongoose.model('Chat', ChatSchema);
+module.exports = Chat; 

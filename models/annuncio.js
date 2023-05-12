@@ -17,5 +17,5 @@ const AnnuncioSchema = new mongoose.Schema({
     }
 });
 
-const Annuncio = mongoose.model('Annuncio', AnnuncioSchema); //convert to model named Annuncio
-module.exports = Annuncio; //export for controller use
+const Annuncio = mongoose.model('Annuncio', AnnuncioSchema); 
+module.exports = Annuncio;
