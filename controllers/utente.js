@@ -41,12 +41,13 @@ const login = async (req, res) => {
 		token: token,
 		id: user.id,
 		nome: user.nome,
-		cognome: user.cognome
+		cognome: user.cognome,
+		email: user.email
 	});
 };
 
-// signup
-const signup = async (req, res) => {
+// registrazione
+const registrazione = async (req, res) => {
 	if (!req.body.nome || !req.body.cognome || !req.body.data_nascita || !req.body.numero_tel || !req.body.email || !req.body.password) {
 		res.status(400).json({ success: false, message: 'Please, complete the form' });
 		return;
@@ -91,10 +92,10 @@ const logout = (req, res) => {
 	 */
 };
 
-const deleteUtente = (req, res) => {
-    console.log("Deleting user: ", req.body.userId);
+const cancella_account = (req, res) => {
+    console.log("Deleting user: ", req.params.id);
 
-    Utente.findOneAndDelete({ _id: req.body.userId }, (err, data) => {
+    Utente.findOneAndDelete({ _id: req.params.id }, (err, data) => {
         if (err) {
             return res.status(500).json({ Error: err });
         }
@@ -109,7 +110,7 @@ const deleteUtente = (req, res) => {
 	//TO-DO Cancellare gli annunci dell'utente
 };
 
-const getAnnunciPubblicati = async (req, res) => {
+const get_annunci_pubblicati = async (req, res) => {
 	userId = req.loggedUser.id;
 
 	if (!userId) {
@@ -134,7 +135,7 @@ const getAnnunciPubblicati = async (req, res) => {
 	return res.status(200).json({ success: true, annunci_pubblicati: annunci });
 };
 
-const getAnnunciSalvati = async (req, res) => {
+const get_annunci_salvati = async (req, res) => {
 	userId = req.loggedUser.id;
 
 	if (!userId) {
@@ -161,9 +162,9 @@ const getAnnunciSalvati = async (req, res) => {
 
 module.exports = {
 	login: login,
-	signup: signup, 
+	registrazione: registrazione, 
 	logout: logout,
-	deleteUtente: deleteUtente,
-	getAnnunciPubblicati: getAnnunciPubblicati,
-	getAnnunciSalvati: getAnnunciSalvati
+	cancella_account: cancella_account,
+	get_annunci_pubblicati: get_annunci_pubblicati,
+	get_annunci_salvati: get_annunci_salvati
 };

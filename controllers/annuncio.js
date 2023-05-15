@@ -1,7 +1,7 @@
 const Annuncio = require('../models/annuncio');
 const Utente = require('../models/utente');
 //const Locale = require('../models/locale');
-//const { getAnnunciPubblicati } = require('./utente');
+//const { get_annunciPubblicati } = require('./utente');
 
 /*
 return res.status(200).json({ message: "Organisation found", data: data });
@@ -16,7 +16,7 @@ return res.status(500).json({ Error: "Internal server error: " + err });
 
 
 // Aggiunge un annuncio nel database con i campi inseriti dall'utente
-const addAnnuncio = async (req, res) => {
+const pubblica_annuncio = async (req, res) => {
 	var scadenza_vetrina = new Date();
 	scadenza_vetrina.setDate(scadenza_vetrina.getDate() + parseInt(req.body.durata_vetrina));
 	const nuovoAnnuncio = new Annuncio({
@@ -50,7 +50,7 @@ const addAnnuncio = async (req, res) => {
 }
 
 // Restituisce tutti gli annunci presenti nel database
-const getAnnunci = async (req, res) => {
+const get_annunci = async (req, res) => {
 	await Annuncio.find({ }).exec().then((result) => {
 		annunci = result;
 	}).catch((err) => {
@@ -64,7 +64,7 @@ const getAnnunci = async (req, res) => {
 };
 
 // Restituisce un annuncio dato il suo id
-const getAnnuncio = (req, res) => {
+const get_annuncio = (req, res) => {
     Annuncio.findOne({ _id: req.params.id }, (err, data) => {
 		if (err)
             return res.status(500).json({ Error: "Internal server error: " + err });
@@ -76,7 +76,7 @@ const getAnnuncio = (req, res) => {
 };
 
 // Elimina un annuncio dal database dato il suo id
-const deleteAnnuncio = (req, res) => {
+const elimina_annuncio = (req, res) => {
     Annuncio.findOneAndDelete({ _id: req.params.id }, (err, data) => {
         if (err)
             return res.status(500).json({ Error: "Internal server error: " + err });
@@ -94,7 +94,7 @@ const deleteAnnuncio = (req, res) => {
 };
 
 // Quando un utente salva un annuncio, l'id dell'annuncio viene inserito in annunci_salvati
-const saveAnnuncio = async (req, res) => {
+const salva_annuncio = async (req, res) => {
 	Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $push: { annunci_salvati: req.params.id } }, (err, data) => {
 		if (err)
 			return res.status(500).json({ Error: "Internal server error: " + err });
@@ -103,7 +103,7 @@ const saveAnnuncio = async (req, res) => {
 }
 
 // Elimina un annuncio che era stato salvato
-const deleteAnnuncioSalvato = async (req, res) => {
+const rimuovi_annuncio_salvato = async (req, res) => {
     Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $pull: { annunci_salvati: req.params.id } }, (err, data) => {
 		if (err)
 			return res.status(500).json({ Error: "Internal server error: " + err });
@@ -112,10 +112,10 @@ const deleteAnnuncioSalvato = async (req, res) => {
 };
 
 module.exports = {
-	addAnnuncio: addAnnuncio,
-	getAnnunci: getAnnunci,
-	getAnnuncio: getAnnuncio,
-	deleteAnnuncio: deleteAnnuncio,
-	saveAnnuncio: saveAnnuncio,
-	deleteAnnuncioSalvato: deleteAnnuncioSalvato
+	pubblica_annuncio: pubblica_annuncio,
+	get_annunci: get_annunci,
+	get_annuncio: get_annuncio,
+	elimina_annuncio: elimina_annuncio,
+	salva_annuncio: salva_annuncio,
+	rimuovi_annuncio_salvato: rimuovi_annuncio_salvato
 };

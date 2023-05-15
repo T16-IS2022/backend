@@ -1,17 +1,17 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
-//const swaggerUi = require('swagger-ui-express');
+const swaggerUi = require('swagger-ui-express');
 const app = express();
 const cors = require('cors');
-//const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('./swagger.json');
 const path = require('path');
 
 const utente_route = require('./routes/utente'); // import the routes
 const annuncio_route = require('./routes/annuncio'); // import the routes
 
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use('/api-docs', express.static('node_modules/swagger-ui-dist/', {index: false}), swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', express.static('node_modules/swagger-ui-dist/', {index: false}), swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 app.use(cors())
 
