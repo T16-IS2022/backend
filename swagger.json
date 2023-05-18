@@ -3,96 +3,136 @@
   "info": {
     "version": "1.0.0",
     "title": "HouseFinder API",
-    "description": "HouseFinder API"
+    "description": "Lista degli endpoints dell'applicazione HouseFinder e informazioni sul loro utilizzo."
   },
-  "host": "localhost:8080",
+  "host": "localhost:3000",
   "basePath": "/",
-  "tags":[ {
-    "name": "utente",
-    "description": "API per l'utente"
-  },
-  {
-    "name": "annuncio",
-    "description": "API per il robot"
-  }],
-  "schemes": ["http"],
-  "securityDefinitions": {
-    "jwt": {
-      "type": "apiKey",
-      "in": "header",
-      "name": "x-access-token"
+  "tags": [
+    {
+      "name": "utente",
+      "description": "API per la gestione dell'utente"
+    },
+    {
+      "name": "annuncio",
+      "description": "API per la gestione degli annunci"
+    },
+    {
+      "name": "ricerca",
+      "description": "API per la gestione della ricerca"
+    },
+    {
+      "name": "chat",
+      "description": "API per la gestione della chat"
+    },
+    {
+      "name": "messaggio",
+      "description": "API per la gestione dei messaggi"
     }
-  },
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
   "paths": {
     "/utente/signup": {
-        "post": {
-          "tags": ["utente"],
-          "summary": "Registrazione utente",
-          "description": "Registra un nuovo utente",
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "Utente da registrare",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/signup_body"
-              }
-            }
-          ],
-          "responses": {
-            "201": {
-              "description": "User created successfully"
-            },
-            "400": {
-              "description": "Please, pass a username, password, email and phone number."
-            },
-            "409": {
-              "description": "Username already taken."
-            },
-            "500": {
-              "description": "Internal server error."
-            }
-          }
-        }
-    },
-    "/utente/login": {     
       "post": {
-        "tags": ["utente"],
-        "summary": "login",
-        "description": "Effettua il login",
+        "summary": "Registrazione account",
+        "description": "Registra un nuovo utente",
+        "operationId": "signup",
+        "tags": [
+          "utente"
+        ],
         "parameters": [
           {
             "name": "user",
             "in": "body",
-            "description": "Utente da registrare",
+            "description": "Credenziali da registrare",
+            "schema": {
+              "$ref": "#/definitions/credenziali_registrazione"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "La registrazione è avvenuta con successo."
+          },
+          "400": {
+            "description": "L'input non è formattato correttamente."
+          },
+          "409": {
+            "description": "Indirizzo email già presente nel sistema."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/utente/login": {
+      "post": {
+        "summary": "Accesso account",
+        "description": "Effettua il login",
+        "operationId": "login",
+        "tags": [
+          "utente"
+        ],
+        "parameters": [
+          {
+            "name": "credentials",
+            "in": "body",
+            "description": "Credenziali necessarie",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/login_body"
+              "$ref": "#/definitions/credenziali_login"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Enjoy your token!",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "token": {
-                      "type": "string"
-                    }
-                }
-              }
-            }
+            "description": "L'accesso è avvenuto correttamente"
           },
           "400": {
-            "description": "Please, pass a username, password."
+            "description": "Alcuni parametri sono assenti"
           },
           "401": {
-            "description": "Authentication failed. Wrong password."
+            "description": "Credenziali errate"
           },
           "404": {
-            "description": "User not found."
+            "description": "Email non presente nel sistema"
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/utente/modifica_profilo": {
+      "post": {
+        "summary": "Registrazione account",
+        "description": "Registra un nuovo utente",
+        "operationId": "signup",
+        "tags": [
+          "utente"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Credenziali da registrare",
+            "schema": {
+              "$ref": "#/definitions/credenziali_registrazione"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "La registrazione è avvenuta con successo."
+          },
+          "400": {
+            "description": "L'input non è formattato correttamente."
+          },
+          "409": {
+            "description": "Indirizzo email già presente nel sistema."
           },
           "500": {
             "description": "Internal server error."
@@ -102,20 +142,98 @@
     },
     "/utente/logout": {
       "get": {
-        "tags": ["utente"],
+        "tags": [
+          "utente"
+        ],
         "summary": "Logout",
         "description": "Effettua il logout",
-        "security": [
+        "responses": {
+          "200": {
+            "description": "Il logout è avvenuto correttamente"
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/annuncio/list": {
+      "get": {
+        "summary": "Lista annunci",
+        "description": "Restituisce la lista degli annunci della pagina principale",
+        "operationId": "get_annunci",
+        "tags": [
+          "annuncio"
+        ],
+        "responses": {
+          "200": {
+            "description": "La richiesta è stata eseguita con successo."
+          },
+          "400": {
+            "description": "L'input non è formattato correttamente."
+          },
+          "404": {
+            "description": "Pagina non trovata."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/annuncio/{id}": {
+      "get": {
+        "summary": "Lista annunci",
+        "description": "Restituisce la lista degli annunci della pagina principale",
+        "operationId": "get_annuncio",
+        "tags": [
+          "annuncio"
+        ],
+        "parameters": [
           {
-            "jwt": []
+            "name": "id",
+            "in": "path",
+            "description": "Id annuncio",
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
-            "description": "Logged out successfully"
+            "description": "L'annuncio è stato restituito con successo."
           },
-          "401": {
-            "description": "User not logged in"
+          "400": {
+            "description": "L'input non è formattato correttamente."
+          },
+          "404": {
+            "description": "Pagina non trovata."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/annuncio/salva/{id}": {
+      "get": {
+        "summary": "Salva annuncio",
+        "description": "Salva un annuncio nella lista degli annunci salvati",
+        "operationId": "salva_annuncio",
+        "tags": [
+          "annuncio"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id annuncio",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "L'annuncio è stato salvato con successo."
           },
           "500": {
             "description": "Internal server error."
@@ -125,14 +243,16 @@
     }
   },
   "definitions": {
+    "id": {
+      "type": "integer"
+    },
     "utente": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
+        "name": {
+          "type": "string"
         },
-        "username": {
+        "surname": {
           "type": "string"
         },
         "email": {
@@ -141,19 +261,43 @@
         "numero_tel": {
           "type": "string"
         },
-        "hash_password": {
+        "password": {
           "type": "string"
-        },
-        "ruolo": {
-          "type": "string"
-        },
-        "nomi_organizzazioni": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         }
       }
+    },
+    "credenziali_registrazione": {
+      "type":"object",
+      "properties": {
+        "nome": {"type":"string"},
+        "cognome": {"type":"string"},
+        "data_di_nascita": {"$ref": "#/definitions/date"},
+        "numero_di_telefono": {"type":"string"},
+        "email": {"type":"string"},
+        "password": {"type":"string"}
+      }
+    },
+    "credenziali_login": {
+      "type":"object",
+      "properties": {
+        "email": {"type": "string"},
+        "password": {"type": "string"}
+      }
+    },
+    "date": {
+      "type":"object",
+      "properties": {
+        "day": {"type":"integer"},
+        "month": {"type":"integer"},
+        "year": {"type":"integer"}
+      }
+    }
+  },
+  "securityDefinitions": {
+    "jwt": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "x-access-token"
     }
   }
 }
