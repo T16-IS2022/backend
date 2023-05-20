@@ -1,5 +1,4 @@
 const express = require('express');
-
 const router = express.Router();
 const messaggioController = require('../controllers/messaggio');
 const tokenChecker = require('../middleware/tokenChecker');

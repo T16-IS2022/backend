@@ -1,5 +1,4 @@
 const express = require('express');
-
 const router = express.Router();
 const utenteController = require('../controllers/utente');
 const tokenChecker = require('../middleware/tokenChecker');

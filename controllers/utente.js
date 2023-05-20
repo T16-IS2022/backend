@@ -3,41 +3,39 @@ const Annuncio = require('../models/annuncio'); // get our mongoose model
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 const crypto = require('crypto');
 
-// login
+const hash = (password) => crypto.createHash('sha256').update(password).digest('hex');
+const getToken = (data) => jwt.sign(data, process.env.SUPER_SECRET, { expiresIn: 86400 });
+
 const login = async (req, res) => {
-	if (!req.body.email || !req.body.password) {
-		return res.status(400).json({ success: false, message: 'Please, pass an email, password.' });
-	}
+	if (!req.body)
+		return res.status(400).json({ code: 400, message: 'Alcuni parametri sono assenti.' });
 	
-	let user = await Utente.findOne({ email: req.body.email }).exec().catch((err) => {
-		return res.status(500).json({ Error: "Internal server error: " + err });
+	//salvo nella variabile email la email che mi ha passato l'utente nella richiesta POST 
+	let email = req.body.email;
+	//salvo nella variabile password la password che mi ha passato l'utente nella richiesta POST
+	let password = req.body.password;
+	
+	//se la email o la password sono vuote
+	if (!email || !password)
+		return res.status(400).json({ code: 400, message: 'Alcuni parametri sono assenti.' });
+
+	let user = await Utente.findOne({ email: email }).exec().catch((err) => {
+		return res.status(500).json({ code: 500, message: 'Internal server error.' });
 	});
 
-	if (!user) {
-		console.log("User not found");
-		return res.status(404).json({ success: false, message: 'Authentication failed. User not found.' });
-	}
+	//se non ho trovato l'utente nel database
+	if (!user)
+		return res.status(404).json({ code: 404, message: 'Email non presente nel sistema.' });
 
-	let hash = crypto.createHash('sha256').update(req.body.password).digest('hex');
-
-	if (user.password != hash) {
-		return res.status(401).json({ success: false, message: 'Authentication failed. Wrong password.' });
-	}
-	// if user is found and password is right create a token
-	var payload = {
-		email: user.email,
-		id: user._id	
-	}
-
-	var options = {
-		expiresIn: 86400 // expires in 24 hours
-	}
-
-	var token = jwt.sign(payload, process.env.SUPER_SECRET, options);
+	//se la password hashata dell'utente è diversa da hash(password inserita)
+	if (user.password != hash(password))
+		return res.status(401).json({ code: 401, message: 'Password errata.' });
+	
+	var token = getToken(user);
 
 	return res.status(200).json({
-		success: true,
-		message: 'Enjoy your token!',
+		code: 200,
+		message: 'L\'accesso è avvenuto correttamente.',
 		token: token,
 		id: user.id,
 		nome: user.nome,
@@ -46,43 +44,46 @@ const login = async (req, res) => {
 	});
 };
 
-// registrazione
 const registrazione = async (req, res) => {
-	if (!req.body.nome || !req.body.cognome || !req.body.data_nascita || !req.body.numero_tel || !req.body.email || !req.body.password) {
-		res.status(400).json({ success: false, message: 'Please, complete the form' });
-		return;
-	}
-	// check if email is already taken
-	let user;
-	await Utente.findOne({ email: req.body.email }).exec().then((result) => {
-		user = result;
-	}).catch((err) => {
-		return res.status(500).json({ Error: "Internal server error: " + err });
+	if (!req.body)
+		return res.status(400).json({ code: 400, message: 'L\'input non è formattato correttamente.' });
+	
+	let nome = req.body.nome;
+	let cognome = req.body.nome;
+	let data_nascita = req.body.data_nascita;
+	let numero_tel = req.body.numero_tel;
+	let email = req.body.email;
+	let password = req.body.password;
+
+	if (!req.body.nome || !req.body.cognome || !req.body.data_nascita || !req.body.numero_tel || !req.body.email || !req.body.password)
+		return res.status(400).json({ code: 400, message: 'L\'input non è formattato correttamente.' });
+
+	let user = await Utente.findOne({ email: email }).exec().catch((err) => {
+		return res.status(500).json({ code: 500, message: 'Internal server error.' });
 	});
 
-	if (user) {
-		res.status(409).json({ success: false, message: 'Email already taken.' });
-		return;
-	}
+	//se l'utente è già registrato
+	if (user)
+		return res.status(409).json({ code: 409, message: 'Indirizzo email già presente nel sistema.' });
 
 	// create a new user
 	const nuovoUtente = new Utente({
-		nome: req.body.nome,
-		cognome:  req.body.cognome,
-		data_nascita: req.body.data_nascita,
-		numero_tel: req.body.numero_tel,
-		email: req.body.email,
-		password: crypto.createHash('sha256').update(req.body.password).digest('hex'),
+		nome: nome,
+		cognome:  cognome,
+		data_nascita: data_nascita,
+		numero_tel: numero_tel,
+		email: email,
+		password: hash(password),
 		annunci_salvati: [],
 		annunci_pubblicati: [],
 		ricerche_salvate: []
 	});
 
 	nuovoUtente.save((err) => {
-		if (err) {
-			return res.status(500).json({ Error: "Internal server error: " + err });
-		}
-		return res.status(201).json({ success: true, message: 'User created successfully.' });
+		if (err)
+			return res.status(500).json({ code: 500, message: 'Internal server error.' });
+		
+		return res.status(201).json({ code: 201, message: 'La registrazione è avvenuta con successo.' });
 	});
 };
 
@@ -93,19 +94,14 @@ const logout = (req, res) => {
 };
 
 const cancella_account = (req, res) => {
-    console.log("Deleting user: ", req.params.id);
-
     Utente.findOneAndDelete({ _id: req.params.id }, (err, data) => {
-        if (err) {
-            return res.status(500).json({ Error: err });
-        }
-        else if (data) {
-            return res.status(204).json({ message: "User deleted" });
-        } else {
-            // if user is not found return 404 error
-            return res.status(404).json({ message: "User not found" });
-        }
-    })
+        if (err)
+            return res.status(500).json({ code: 500, message: "Internal server error." });
+        else if (!data)
+            return res.status(404).json({ code: 404, message: "L'utente richiesto non esiste." });
+        else
+        	return res.status(204).json({ code: 204, message: "Utente cancellato correttamente." });
+    });
 
 	//TO-DO Cancellare gli annunci dell'utente
 };
@@ -113,52 +109,51 @@ const cancella_account = (req, res) => {
 const get_annunci_pubblicati = async (req, res) => {
 	userId = req.loggedUser.id;
 
-	if (!userId) {
-		res.status(401).json({ success: false, message: 'Unauthorized.' });
-		return;
-	}
+	if (!userId)
+		return res.status(401).json({ code: 401, message: 'Unauthorized.' });
 
-	let profile;
-	await Utente.findOne({ _id: userId }).exec().then((result) => {
-		profile = result;
-	}).catch((err) => {
-		return res.status(500).json({ Error: "Internal server error: " + err });
+	let user = await Utente.findOne({ _id: userId }).exec().catch((err) => {
+		return res.status(500).json({ code: 500, message: 'Internal server error.' });
 	});
+	
+	if (!user)
+		return res.status(404).json({ code: 404, message: 'Utente non trovato.' });
 
-	if (!profile) {
-		res.status(404).json({ success: false, message: 'User not found.' });
-		return;
-	}
+	const annunci = await Annuncio.find({ _id: { $in: user.annunci_pubblicati } });
 
-	const annunci = await Annuncio.find({ _id: { $in: profile.annunci_pubblicati } });
-
-	return res.status(200).json({ success: true, annunci_pubblicati: annunci });
+	return res.status(200).json({ code: 200, annunci_pubblicati: annunci });
 };
 
 const get_annunci_salvati = async (req, res) => {
 	userId = req.loggedUser.id;
 
-	if (!userId) {
-		res.status(401).json({ success: false, message: 'Unauthorized.' });
-		return;
-	}
+	if (!userId)
+		return res.status(401).json({ code: 401, message: 'Unauthorized.' });
 
-	let profile;
-	await Utente.findOne({ _id: userId }).exec().then((result) => {
-		profile = result;
-	}).catch((err) => {
-		return res.status(500).json({ Error: "Internal server error: " + err });
+	let user = await Utente.findOne({ _id: userId }).exec().catch((err) => {
+		return res.status(500).json({ code: 500, message: 'Internal server error.' });
 	});
+	
+	if (!user)
+		return res.status(404).json({ code: 404, message: 'Utente non trovato.' });
 
-	if (!profile) {
-		res.status(404).json({ success: false, message: 'User not found.' });
-		return;
-	}
+	const annunci = await Annuncio.find({ _id: { $in: user.annunci_salvati } });
 
-	const annunci = await Annuncio.find({ _id: { $in: profile.annunci_salvati } });
-
-	return res.status(200).json({ success: true, annunci_salvati: annunci });
+	return res.status(200).json({ code: 200, annunci_salvati: annunci });
 };
+
+const get_ricerche_salvate = async (req, res) => {
+}
+
+const get_chat = async (req, res) => {
+}
+
+const modifica_profilo = async (req, res) => {
+}
+
+const recupero_password = async (req, res) => {
+}
+
 
 module.exports = {
 	login: login,
@@ -166,5 +161,9 @@ module.exports = {
 	logout: logout,
 	cancella_account: cancella_account,
 	get_annunci_pubblicati: get_annunci_pubblicati,
-	get_annunci_salvati: get_annunci_salvati
+	get_annunci_salvati: get_annunci_salvati,
+	get_ricerche_salvate: get_ricerche_salvate,
+	get_chat: get_chat,
+	recupero_password: recupero_password,
+	modifica_profilo: modifica_profilo
 };
