@@ -1,7 +1,9 @@
 const mongoose = require("mongoose"); //import mongoose
 const LocaleSchema = require('./locale');
+const Schema = mongoose.Schema;
 
 const AnnuncioSchema = new mongoose.Schema({
+    creatore: { type: Schema.Types.ObjectId, ref: 'Utente' },
     foto: [String],
     superficie_tot: Number,
     numero_bagni: Number,

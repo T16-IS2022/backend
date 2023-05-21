@@ -3,6 +3,6 @@ const router = express.Router();
 const messaggioController = require('../controllers/messaggio');
 const tokenChecker = require('../middleware/tokenChecker');
 
-router.post('/messaggio/:id', messaggioController.invia_messaggio);
+router.post('/messaggio', messaggioController.invia_messaggio);
 
 module.exports = router;

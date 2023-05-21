@@ -1,5 +1,4 @@
 const mongoose = require("mongoose"); //import mongoose
-const RicercaSchema = require('./ricerca');
 const Schema = mongoose.Schema;
 
 const UtenteSchema = new mongoose.Schema({
@@ -11,7 +10,7 @@ const UtenteSchema = new mongoose.Schema({
     password: String,
     annunci_salvati: [{ type: Schema.Types.ObjectId, ref: 'Annuncio' }],
     annunci_pubblicati: [{ type: Schema.Types.ObjectId, ref: 'Annuncio' }],
-    ricerche_salvate: [RicercaSchema.schema],
+    ricerche_salvate: [{ type: Schema.Types.ObjectId, ref: 'Ricerca' }],
     lista_chat: [{ type: Schema.Types.ObjectId, ref: 'Chat' }]
 });
 

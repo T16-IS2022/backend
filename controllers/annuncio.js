@@ -1,34 +1,29 @@
 const Annuncio = require('../models/annuncio');
 const Utente = require('../models/utente');
-//const Locale = require('../models/locale');
-//const { get_annunciPubblicati } = require('./utente');
-
-/*
-return res.status(200).json({ message: "Organisation found", data: data });
-return res.status(201).json({ message: "Organisation created", data: data }); (dopo una post)
-return res.status(204).json({ message: "Organisation deleted" }); (dopo una buona delete)
-return res.status(400).json({ message: "Bad request, missing parameters" }); (se i campi sono incompleti)
-return  res.status(401).json({ success: false, message: 'Unauthorized.' });
-return res.status(404).json({ message: "Organisation not found" });
-return res.status(409).json({ message: "Organisation already exists" });
-return res.status(500).json({ Error: "Internal server error: " + err });
-*/
-
 
 // Aggiunge un annuncio nel database con i campi inseriti dall'utente
 const pubblica_annuncio = async (req, res) => {
+	let userId = req.body.userId;
+	const { foto, numero_bagni, numero_locali, locali, superficie_tot, prezzo, classe_energetica, indirizzo, arredato } = req.body;
 	var scadenza_vetrina = new Date();
 	scadenza_vetrina.setDate(scadenza_vetrina.getDate() + parseInt(req.body.durata_vetrina));
+
+	if (!(foto && numero_bagni && numero_locali && locali && superficie_tot && prezzo && classe_energetica && indirizzo && arredato && scadenza_vetrina))
+		return res.status(400).json({ code: 400, message: 'Alcuni parametri sono assenti.' });
+	if (!userId)
+		return res.status(401).json({ code: 401, message: 'Utente non autorizzato.' });
+	
 	const nuovoAnnuncio = new Annuncio({
-		foto: req.body.foto,
-		numero_bagni: req.body.numero_bagni,
-		numero_locali: req.body.numero_locali,
-		locali: req.body.locali,
-		superficie_tot: req.body.superficie,
-		prezzo: req.body.prezzo,
-		classe_energetica: req.body.classe_energetica,
-		indirizzo: req.body.indirizzo,
-		arredato: req.body.arredato,
+		creatore: userId,
+		foto: foto,
+		numero_bagni: numero_bagni,
+		numero_locali: numero_locali,
+		locali: locali,
+		superficie_tot: superficie_tot,
+		prezzo: prezzo,
+		classe_energetica: classe_energetica,
+		indirizzo: indirizzo,
+		arredato: arredato,
 		vetrina: {
 			data_inizio: new Date(),
 			data_fine: scadenza_vetrina
@@ -38,83 +33,121 @@ const pubblica_annuncio = async (req, res) => {
 	//salviamo l'annuncio nel database
 	nuovoAnnuncio.save((err) => {
 		if (err)
-			return res.status(500).json({ Error: "Internal server error: " + err });
-		else
-			return res.status(201).json({ success: true, message: "Ad created successfully" });
+			return res.status(500).json({ code: 500, message: 'Internal server error.' });			
 	});
 
 	//lo inseriamo nella lista degli annunci salvati dell'utente
-	const utente = await Utente.findById(req.body.userId);
-	utente.annunci_pubblicati.push(nuovoAnnuncio._id);
-	await utente.save();
+	const user = await Utente.findById(userId);
+	user.annunci_pubblicati.push(nuovoAnnuncio._id);
+	await user.save();
+	return res.status(201).json({ code: 401, message: 'Annuncio creato con successo.' });
 }
 
 // Restituisce tutti gli annunci presenti nel database
 const get_annunci = async (req, res) => {
-	await Annuncio.find({ }).exec().then((result) => {
-		annunci = result;
-	}).catch((err) => {
-		return res.status(500).json({ Error: "Internal server error: " + err });
-	});
-
-	if (!annunci)
-		return res.status(404).json({ success: false, message: 'Ads not found' });
-	else
-		return res.status(200).json({ success: true, message: 'Ads found', annunci: annunci });
-};
+	Annuncio.find({ }, (err, data) => {
+		if (err)
+            return res.status(500).json({ code: 500, message: 'Internal server error.' });
+        else if (!data)
+			return res.status(404).json({ code: 404, message: "Annunci non trovati." });
+		else
+            return res.status(200).json({ code: 200, message: "Elenco degli annunci ottenuto correttamente.", annuncio: data });
+    });
+}
 
 // Restituisce un annuncio dato il suo id
 const get_annuncio = (req, res) => {
     Annuncio.findOne({ _id: req.params.id }, (err, data) => {
 		if (err)
-            return res.status(500).json({ Error: "Internal server error: " + err });
-        if (data)
-            return res.status(200).json({ message: "Ad found", annuncio: data });
+            return res.status(500).json({ code: 500, message: 'Internal server error.' });
+        else if (!data)
+			return res.status(404).json({ code: 404, message: "Annuncio non trovato." });
         else
-            return res.status(404).json({ message: "Ad not found" });
-    })
-};
+			return res.status(200).json({ code: 200, message: "Annuncio ottenuto correttamente.", annuncio: data });
+    });
+}
 
 // Elimina un annuncio dal database dato il suo id
 const elimina_annuncio = (req, res) => {
     Annuncio.findOneAndDelete({ _id: req.params.id }, (err, data) => {
         if (err)
-            return res.status(500).json({ Error: "Internal server error: " + err });
-        if (data) {
-            // rimuoviamo l'id dell'annuncio dalla lista di annunci 
+            return res.status(500).json({ code: 500, message: 'Internal server error.' });
+        else if (!data)
+            return res.status(404).json({ code: 404, message: 'Annuncio non trovato.' });
+		else {
+			// rimuoviamo l'id dell'annuncio dalla lista di annunci pubblicati dall'utente
             Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $pull: { annunci_pubblicati: req.params.id } }, (err, data) => {
                 if (err)
-                    return res.status(500).json({ Error: "Internal server error: " + err });
+                    return res.status(500).json({ code: 500, message: 'Internal server error.' });
             });
-            return res.status(204).json({ message: "Ad deleted" });
-        }
-		else
-            return res.status(404).json({ message: "Ad not found" });
-    })
-};
+            return res.status(204).json({ code: 204, message: "Annuncio eliminato con successo." });
+		}
+    });
+}
 
 // Quando un utente salva un annuncio, l'id dell'annuncio viene inserito in annunci_salvati
 const salva_annuncio = async (req, res) => {
 	Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $push: { annunci_salvati: req.params.id } }, (err, data) => {
 		if (err)
-			return res.status(500).json({ Error: "Internal server error: " + err });
+			return res.status(500).json({ code: 500, message: 'Internal server error.' });
+		else if (!data)
+			return res.status(404).json({ code: 404, message: 'Utente non trovato.' });
+		else
+			return res.status(200).json({ code: 200, message: "Annuncio salvato con successo." });
 	});
-	return res.status(200).json({ success: true, message: 'Ad saved' });
 }
 
 // Elimina un annuncio che era stato salvato
 const rimuovi_annuncio_salvato = async (req, res) => {
     Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $pull: { annunci_salvati: req.params.id } }, (err, data) => {
 		if (err)
-			return res.status(500).json({ Error: "Internal server error: " + err });
+			return res.status(500).json({ code: 500, message: 'Internal server error.' });
+		else if (!data)
+			return res.status(404).json({ code: 404, message: 'Utente non trovato.' });
+		else
+			return res.status(200).json({ code: 200, message: "Annuncio rimosso con successo." });
 	});
-	return res.status(200).json({ success: true, message: 'Ad removed correctly' });
-};
+}
+
+const modifica_annuncio = async (req, res) => {
+	const adId = req.params.id; // ID dell'annuncio da modificare
+	const { foto, numero_bagni, numero_locali, locali, superficie_tot, prezzo, classe_energetica, indirizzo, arredato } = req.body;
+	var scadenza_vetrina = new Date();
+	scadenza_vetrina.setDate(scadenza_vetrina.getDate() + parseInt(req.body.durata_vetrina));
+
+	// Esegui la ricerca dell'annuncio nel database per verificare l'esistenza
+	Annuncio.findById(adId)
+    .then((annuncio) => {
+    	if (!annuncio)
+        	return res.status(404).json({ code: 404, message: 'Annuncio non trovato.' });
+
+    	// Aggiorna i campi del profilo con i nuovi valori
+    	annuncio.foto = foto || annuncio.foto;
+    	annuncio.numero_bagni = numero_bagni || annuncio.numero_bagni;
+    	annuncio.numero_locali = numero_locali || annuncio.numero_locali;
+    	annuncio.locali = locali || annuncio.locali;
+    	annuncio.superficie_tot = superficie_tot || annuncio.superficie_tot;
+    	annuncio.prezzo = prezzo || annuncio.prezzo;
+    	annuncio.classe_energetica = classe_energetica || annuncio.classe_energetica;
+    	annuncio.indirizzo = indirizzo || annuncio.indirizzo;
+    	annuncio.arredato = arredato || annuncio.arredato;
+    	
+		// Salva le modifiche
+    	return annuncio.save();
+    })
+    .then(() => {
+    	res.status(200).json({ code: 200, message: 'Modifica dell\'annuncio riuscita.' });
+    })
+    .catch((err) => {
+    	res.status(500).json({ code: 500, message: 'Internal server error.' });
+    });
+}
 
 module.exports = {
 	pubblica_annuncio: pubblica_annuncio,
 	get_annunci: get_annunci,
 	get_annuncio: get_annuncio,
+	modifica_annuncio: modifica_annuncio,
 	elimina_annuncio: elimina_annuncio,
 	salva_annuncio: salva_annuncio,
 	rimuovi_annuncio_salvato: rimuovi_annuncio_salvato
