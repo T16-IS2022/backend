@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 const crypto = require('crypto');
 
 const hash = (password) => crypto.createHash('sha256').update(password).digest('hex');
-const getToken = (data) => jwt.sign(data, process.env.SUPER_SECRET, { expiresIn: 86400 });
+const getToken = (data) => jwt.sign({data}, process.env.SUPER_SECRET, { expiresIn: 86400 });
 
 const login = async (req, res) => {
 	if (!req.body)
@@ -33,7 +33,8 @@ const login = async (req, res) => {
 	if (user.password != hash(password))
 		return res.status(401).json({ code: 401, message: 'Password errata.' });
 	
-	var token = getToken(user);
+	var payload = { id: user._id }
+	var token = getToken(payload);
 
 	return res.status(200).json({
 		code: 200,
@@ -92,7 +93,7 @@ const logout = (req, res) => {
 }
 
 const cancella_account = async (req, res) => {
-	let userId = req.params.id;
+	const userId = req.params.id;
 	let user = await Utente.findOne({ _id: userId }).exec().catch((err) => {
 		return res.status(500).json({ code: 500, message: 'Internal server error.' });
 	});
@@ -114,8 +115,7 @@ const cancella_account = async (req, res) => {
 }
 
 const get_annunci_pubblicati = async (req, res) => {
-	userId = req.loggedUser.id;
-
+	const userId = req.loggedUser.id;
 	if (!userId)
 		return res.status(401).json({ code: 401, message: 'Utente non autorizzato.' });
 
@@ -132,7 +132,7 @@ const get_annunci_pubblicati = async (req, res) => {
 }
 
 const get_annunci_salvati = async (req, res) => {
-	userId = req.loggedUser.id;
+	const userId = req.loggedUser.id;
 
 	if (!userId)
 		return res.status(401).json({ code: 401, message: 'Utente non autorizzato.' });
@@ -150,7 +150,7 @@ const get_annunci_salvati = async (req, res) => {
 }
 
 const get_ricerche_salvate = async (req, res) => {
-	userId = req.loggedUser.id;
+	const userId = req.loggedUser.id;
 
 	if (!userId)
 		return res.status(401).json({ code: 401, message: 'Utente non autorizzato.' });
@@ -168,7 +168,7 @@ const get_ricerche_salvate = async (req, res) => {
 }
 
 const get_chat = async (req, res) => {
-	userId = req.loggedUser.id;
+	const userId = req.loggedUser.id;
 
 	if (!userId)
 		return res.status(401).json({ code: 401, message: 'Utente non autorizzato.' });

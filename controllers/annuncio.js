@@ -3,12 +3,12 @@ const Utente = require('../models/utente');
 
 // Aggiunge un annuncio nel database con i campi inseriti dall'utente
 const pubblica_annuncio = async (req, res) => {
-	let userId = req.body.userId;
+	const userId = req.body.userId;
 	const { foto, numero_bagni, numero_locali, locali, superficie_tot, prezzo, classe_energetica, indirizzo, arredato } = req.body;
 	var scadenza_vetrina = new Date();
 	scadenza_vetrina.setDate(scadenza_vetrina.getDate() + parseInt(req.body.durata_vetrina));
 
-	if (!(foto && numero_bagni && numero_locali && locali && superficie_tot && prezzo && classe_energetica && indirizzo && arredato && scadenza_vetrina))
+	if (!(numero_bagni && numero_locali && superficie_tot && prezzo && classe_energetica && indirizzo))
 		return res.status(400).json({ code: 400, message: 'Alcuni parametri sono assenti.' });
 	if (!userId)
 		return res.status(401).json({ code: 401, message: 'Utente non autorizzato.' });
@@ -51,7 +51,7 @@ const get_annunci = async (req, res) => {
         else if (!data)
 			return res.status(404).json({ code: 404, message: "Annunci non trovati." });
 		else
-            return res.status(200).json({ code: 200, message: "Elenco degli annunci ottenuto correttamente.", annuncio: data });
+            return res.status(200).json({ code: 200, message: "Elenco degli annunci ottenuto correttamente.", annunci: data });
     });
 }
 
@@ -80,20 +80,31 @@ const elimina_annuncio = (req, res) => {
                 if (err)
                     return res.status(500).json({ code: 500, message: 'Internal server error.' });
             });
-            return res.status(204).json({ code: 204, message: "Annuncio eliminato con successo." });
+            return res.status(200).json({ code: 200, message: 'Annuncio eliminato con successo.' });
 		}
     });
 }
 
 // Quando un utente salva un annuncio, l'id dell'annuncio viene inserito in annunci_salvati
 const salva_annuncio = async (req, res) => {
-	Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $push: { annunci_salvati: req.params.id } }, (err, data) => {
+	Utente.findOne({ _id: req.loggedUser.id }, (err, user) => {
 		if (err)
 			return res.status(500).json({ code: 500, message: 'Internal server error.' });
-		else if (!data)
+		else if (!user)
 			return res.status(404).json({ code: 404, message: 'Utente non trovato.' });
-		else
-			return res.status(200).json({ code: 200, message: "Annuncio salvato con successo." });
+	  
+		// Verifica se l'annuncio è già presente negli annunci salvati dell'utente
+		if (user.annunci_salvati.includes(req.params.id))
+			return res.status(409).json({ code: 409, message: 'Annuncio già presente negli annunci salvati.' });
+	
+		Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $push: { annunci_salvati: req.params.id } }, (err, data) => {
+			if (err)
+				return res.status(500).json({ code: 500, message: 'Internal server error.' });
+			else if (!data)
+				return res.status(404).json({ code: 404, message: 'Utente non trovato.' });
+			else
+				return res.status(200).json({ code: 200, message: "Annuncio salvato con successo." });
+		});
 	});
 }
 
@@ -109,6 +120,7 @@ const rimuovi_annuncio_salvato = async (req, res) => {
 	});
 }
 
+// Modifica un annuncio dati i dati dell'annuncio
 const modifica_annuncio = async (req, res) => {
 	const adId = req.params.id; // ID dell'annuncio da modificare
 	const { foto, numero_bagni, numero_locali, locali, superficie_tot, prezzo, classe_energetica, indirizzo, arredato } = req.body;

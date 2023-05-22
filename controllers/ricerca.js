@@ -68,7 +68,7 @@ const ricerca_annunci = (req, res) => {
 
 // Quando un utente salva una ricerca, l'id della ricerca viene inserita in ricerche_salvate
 const salva_ricerca = async (req, res) => {
-	let userId = req.body.userId;
+	const userId = req.body.userId;
 	const { superficie_tot, numero_bagni, numero_locali, prezzo, classe_energetica, indirizzo, arredato } = req.query;
 
 	const filtri = {

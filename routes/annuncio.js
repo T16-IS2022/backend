@@ -7,9 +7,9 @@ router.get('/annuncio/list', annuncioController.get_annunci);
 
 router.get('/annuncio/:id', annuncioController.get_annuncio);
 
-router.delete('/annuncio/:id', annuncioController.elimina_annuncio);
+router.delete('/annuncio/:id', tokenChecker, annuncioController.elimina_annuncio);
 
-router.patch('/annuncio/:id', annuncioController.modifica_annuncio);
+router.patch('/annuncio/:id', tokenChecker, annuncioController.modifica_annuncio);
 
 router.post('/annuncio', tokenChecker, annuncioController.pubblica_annuncio);
 
