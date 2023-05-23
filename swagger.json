@@ -7,6 +7,18 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
+  "security": [
+    {
+      "jwt": []
+    }
+  ],
+  "securityDefinitions": {
+    "jwt": {
+      "name": "x-access-token",
+      "type": "apiKey",
+      "in": "header"
+    }
+  },
   "tags": [
     {
       "name": "utente",
@@ -30,11 +42,10 @@
     }
   ],
   "schemes": [
-    "https",
     "http"
   ],
   "paths": {
-    "/utente/signup": {
+    "/utente/registrazione": {
       "post": {
         "summary": "Registrazione account",
         "description": "Registra un nuovo utente",
@@ -54,6 +65,9 @@
         ],
         "responses": {
           "201": {
+            "schema":{
+              "$ref": "#/definitions/utente"
+            },
             "description": "La registrazione è avvenuta con successo."
           },
           "400": {
@@ -89,16 +103,16 @@
         ],
         "responses": {
           "200": {
-            "description": "L'accesso è avvenuto correttamente"
+            "description": "L'accesso è avvenuto correttamente."
           },
           "400": {
-            "description": "Alcuni parametri sono assenti"
+            "description": "Alcuni parametri sono assenti."
           },
           "401": {
-            "description": "Credenziali errate"
+            "description": "Password errata."
           },
           "404": {
-            "description": "Email non presente nel sistema"
+            "description": "Email non presente nel sistema."
           },
           "500": {
             "description": "Internal server error."
@@ -195,7 +209,7 @@
             "in": "path",
             "description": "Id annuncio",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -228,7 +242,7 @@
             "in": "path",
             "description": "Id annuncio",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -244,7 +258,7 @@
   },
   "definitions": {
     "id": {
-      "type": "integer"
+      "type": "string"
     },
     "utente": {
       "type": "object",
@@ -267,37 +281,41 @@
       }
     },
     "credenziali_registrazione": {
-      "type":"object",
+      "type": "object",
       "properties": {
-        "nome": {"type":"string"},
-        "cognome": {"type":"string"},
-        "data_di_nascita": {"$ref": "#/definitions/date"},
-        "numero_di_telefono": {"type":"string"},
-        "email": {"type":"string"},
-        "password": {"type":"string"}
+        "nome": {
+          "type": "string"
+        },
+        "cognome": {
+          "type": "string"
+        },
+        "data_nascita": {
+          "$ref": "#/definitions/date"
+        },
+        "numero_tel": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
       }
     },
     "credenziali_login": {
-      "type":"object",
+      "type": "object",
       "properties": {
-        "email": {"type": "string"},
-        "password": {"type": "string"}
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
       }
     },
     "date": {
-      "type":"object",
-      "properties": {
-        "day": {"type":"integer"},
-        "month": {"type":"integer"},
-        "year": {"type":"integer"}
-      }
-    }
-  },
-  "securityDefinitions": {
-    "jwt": {
-      "type": "apiKey",
-      "in": "header",
-      "name": "x-access-token"
+      "type": "string"
     }
   }
 }
