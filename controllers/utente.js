@@ -9,14 +9,6 @@ const hash = (password) => crypto.createHash('sha256').update(password).digest('
 const getToken = (data) => jwt.sign({ data }, process.env.SUPER_SECRET, { expiresIn: 86400 });
 
 const login = async (req, res) => {
-	/**
-	if (!req.body)
-		return res.status(400).json({ 
-			code: 400, 
-			message: 'Alcuni parametri sono assenti.' 
-		});
-	*/
-
 	//salvo nella variabile email la email che mi ha passato l'utente nella richiesta POST 
 	//salvo nella variabile password la password che mi ha passato l'utente nella richiesta POST
 	const { email, password } = req.body;
@@ -125,10 +117,10 @@ const logout = (req, res) => {
 	/* non dovendo fare operazioni sul backend, il logout è implementato nel frontend,
 	 * ossia in /views/LogoutView.vue
 	 */
-	return res.status(201).json({
+	return res.status(200).json({
 		code: 200,
 		message: 'Ok'
-	})
+	});
 }
 
 const get_annunci_pubblicati = async (req, res) => {
@@ -338,7 +330,6 @@ const recupero_password = async (req, res) => {
 		message: "Internal server error."
 	});
 }
-
 
 module.exports = {
 	login: login,
