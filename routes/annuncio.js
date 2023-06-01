@@ -17,4 +17,6 @@ router.get('/annuncio/salva/:id', tokenChecker, annuncioController.salva_annunci
 
 router.delete('/annuncio/salva/:id', tokenChecker, annuncioController.rimuovi_annuncio_salvato);
 
+router.post('/annuncio/pagamento', tokenChecker, annuncioController.pagamento);
+
 module.exports = router;
