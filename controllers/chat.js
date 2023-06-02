@@ -43,7 +43,7 @@ const crea_chat = async (req, res) => {
         await locatore.save();
         return res.status(201).json({ 
             code: 201, 
-            message: 'Annuncio creato con successo.' 
+            message: 'Chat creata con successo.' 
         });
     }
     
