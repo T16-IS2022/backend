@@ -248,7 +248,14 @@ const get_chat = async (req, res) => {
 
 const modifica_profilo = async (req, res) => {
 	const userId = req.params.id; // ID dell'utente da modificare
-	const { nome, cognome, data_nascita, numero_tel, email, password } = req.body;
+	const { 
+		nome, 
+		cognome, 
+		data_nascita, 
+		numero_tel, 
+		email, 
+		password 
+	} = req.body;
 
 	// Esegui la ricerca dell'utente nel database per verificare l'esistenza
 	Utente.findById(userId)
@@ -321,7 +328,7 @@ const cancella_account = async (req, res) => {
 }
 
 const recupero_password = async (req, res) => {
-	const { email } = req.body;
+	const { email, password } = req.body;
 
 	// TO DO
 
