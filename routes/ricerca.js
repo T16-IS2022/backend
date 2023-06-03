@@ -5,7 +5,7 @@ const tokenChecker = require('../middleware/tokenChecker');
 
 router.get('/ricerca/:filtri', ricercaController.ricerca_annunci);
 
-router.post('/ricerca/salva/', tokenChecker, ricercaController.salva_ricerca);
+router.post('/ricerca/salva', tokenChecker, ricercaController.salva_ricerca);
 
 router.delete('/ricerca/salva/:id', tokenChecker, ricercaController.rimuovi_ricerca_salvata);
 

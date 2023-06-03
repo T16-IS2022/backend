@@ -78,7 +78,8 @@ const ricerca_annunci = (req, res) => {
 		else
 			return res.status(200).json({
 				code: 200,
-				message: 'Elenco degli annunci ottenuto correttamente.', annunci: data
+				message: 'Elenco degli annunci ottenuto correttamente.', 
+				annunci: data
 			});
 	});
 };

@@ -274,9 +274,9 @@ const rimuovi_annuncio_salvato = async (req, res) => {
 }
 
 const pagamento = async (req, res) => {
-	const { durata_annuncio } = req.body;
+	const { annuncio_id } = req.body;
 
-	if(!durata_annuncio) {
+	if(!annuncio_id) {
 		return res.status(500).json({
 			code: 500,
 			message: "Internal server error."
