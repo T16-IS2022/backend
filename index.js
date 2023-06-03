@@ -33,13 +33,9 @@ mongoose.connect(
     }
 );
 
-if (process.env.TESTING == 'true') {
-    console.log("TESTING MODE");
-} else {
-    const listener = app.listen(process.env.PORT || 3000, () => {
-        console.log('Your app is listening on port ' + listener.address().port)
-    })
-}
+const listener = app.listen(process.env.PORT || 3000, () => {
+    console.log('Your app is listening on port ' + listener.address().port)
+})
 
 module.exports = app;
 
