@@ -42,9 +42,10 @@
     }
   ],
   "schemes": [
+    "https",
     "http"
   ],
-  "paths": { 
+  "paths": {
     "/utente/login": {
       "post": {
         "summary": "Accesso account",
@@ -737,7 +738,7 @@
         }
       }
     },
-    "/chat/{id}" : {
+    "/chat/{id}": {
       "get": {
         "summary": "Apri chat",
         "description": "Apri una chat",
