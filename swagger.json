@@ -5,7 +5,7 @@
     "title": "HouseFinder API",
     "description": "Lista degli endpoints dell'applicazione HouseFinder e informazioni sul loro utilizzo."
   },
-  "host": "localhost:3000",
+  "host": "housefinder-backend.vercel.app",
   "basePath": "/",
   "security": [
     {
