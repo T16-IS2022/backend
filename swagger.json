@@ -460,7 +460,7 @@
             "description": "Dati dell'annuncio da modificare",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/annuncio"
+              "$ref": "#/definitions/pubblica_annuncio"
             }
           }
         ],

@@ -1,5 +1,6 @@
 # Ignore files related to API keys
 .env
+.vscode
 
 # Ignore node_modules folder
 .DS_Store
