@@ -42,8 +42,7 @@
     }
   ],
   "schemes": [
-    "https",
-    "http"
+    "https"
   ],
   "paths": {
     "/utente/login": {
@@ -300,7 +299,7 @@
       }
     },
     "/utente/ricerche-salvate": {
-      "post": {
+      "get": {
         "summary": "Ricerche Salvate",
         "description": "Lista delle ricerche salvate dall'utente",
         "operationId": "get_ricerche_salvate",
@@ -440,6 +439,24 @@
         "tags": [
           "annuncio"
         ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id dell'annuncio da modificare",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Dati annuncio",
+            "in": "body",
+            "description": "Dati dell'annuncio da modificare",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/annuncio"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Modifica dell'annuncio riuscita."
@@ -465,7 +482,7 @@
             "in": "path",
             "description": "Id dell'annuncio da eliminare",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {

@@ -1,5 +1,6 @@
 const Utente = require('../models/utente');
 const Annuncio = require('../models/annuncio');
+const Ricerca = require('../models/ricerca');
 
 const ricerca_annunci = (req, res) => {
 	const {
