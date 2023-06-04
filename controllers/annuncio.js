@@ -204,16 +204,16 @@ const modifica_annuncio = async (req, res) => {
 		annuncio.vetrina = scadenza_vetrina ? vetrina : annuncio.vetrina;
     	
 		// Salva le modifiche
-    	return annuncio.save();
+    	annuncio.save();
     })
     .then(() => {
-    	res.status(200).json({ 
+    	return res.status(200).json({ 
 			code: 200, 
 			message: 'Modifica dell\'annuncio riuscita.' 
 		});
     })
     .catch((err) => {
-    	res.status(500).json({ 
+    	return res.status(500).json({ 
 			code: 500, 
 			message: 'Internal server error.' 
 		});
@@ -222,7 +222,7 @@ const modifica_annuncio = async (req, res) => {
 
 // Elimina un annuncio dal database dato il suo id
 const elimina_annuncio = (req, res) => {
-	const { id } = req.body;
+	const id = req.params.id;
     Annuncio.findOneAndDelete({ _id: id }, (err, data) => {
         if (err)
             return res.status(500).json({ 

@@ -272,19 +272,19 @@ const modifica_profilo = async (req, res) => {
 			utente.data_nascita = data_nascita || utente.data_nascita;
 			utente.numero_tel = numero_tel || utente.numero_tel;
 			utente.email = email || utente.email;
-			utente.password = password || utente.password;
+			utente.password = hash(password) || utente.password;
 
 			// Salva le modifiche
-			return utente.save();
+			utente.save();
 		})
 		.then(() => {
-			res.status(200).json({ 
+			return res.status(200).json({ 
 				code: 200, 
 				message: 'Modifica del profilo riuscita.' 
 			});
 		})
 		.catch((err) => {
-			res.status(500).json({ 
+			return res.status(500).json({ 
 				code: 500, 
 				message: 'Internal server error.' 
 			});
