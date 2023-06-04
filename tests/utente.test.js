@@ -28,18 +28,17 @@ describe('POST /utente/registrazione', () => {
     expect(response.statusCode).toBe(409);
   });
 
-  /*test('POST /utente/signup with the correct information should return 201 (user created)', async () => {
-    // get random number to avoid username collision
-    const randomNumber = Math.floor(Math.random() * 1000000);
-    const response = await request(app).post('/utente/signup').send({
-      username: "supercoolusername" + randomNumber,
-      password: "password",
-      email: "email",
-      numero_tel: "numero_tel"
+  test('POST /utente/registrazione con i dati corretti deve ritornare 201', async () => {
+    const response = await request(app).post('/utente/registrazione').send({
+        nome: "Mario",
+        cognome: "Rossi",
+        data_nascita: "2002-05-11T00:00:00.000+00:00",
+        numero_tel: "3425569854",
+        email: "mario.rossi@gmail.com",
+        password: "Qwerty1234#"
     });
-
-    expect(response.statusCode).toBe(201);
-  });*/
+    expect(response.statusCode).toBe(409);
+  });
 });
 
 /*
