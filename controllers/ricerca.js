@@ -1,5 +1,6 @@
 const Utente = require('../models/utente');
 const Annuncio = require('../models/annuncio');
+const Ricerca = require('../models/ricerca');
 
 const ricerca_annunci = (req, res) => {
 	const {
@@ -108,7 +109,7 @@ const salva_ricerca = async (req, res) => {
 	};
 
 	// Rimuovi i parametri nulli o vuoti
-	Object.keys(filtro).forEach(key => filtro[key] == null && delete filtro[key]);
+	Object.keys(filtri).forEach(key => filtri[key] == null && delete filtri[key]);
 
 	const nuovaRicerca = new Ricerca({
 		testo: indirizzo,
