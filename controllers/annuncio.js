@@ -75,7 +75,7 @@ const salva_annuncio = async (req, res) => {
 			else if (!data)
 				return res.status(404).json({ 
 					code: 404, 
-					message: 'Utente non trovato.' 
+					message: 'Annuncio non trovato.' 
 				});
 			else
 				return res.status(200).json({ 
