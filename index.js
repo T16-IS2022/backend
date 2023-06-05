@@ -1,9 +1,9 @@
 require('dotenv').config();
-const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
 const cors = require('cors');
 const path = require('path');
+const db = require('./db.js');
 
 const utente_route = require('./routes/utente'); // import the routes
 const annuncio_route = require('./routes/annuncio'); // import the routes
@@ -30,18 +30,19 @@ app.use((req, res,) => {
     res.json({ error: 'Error 404: Not Found' });
 });
 
-mongoose.connect(
-    process.env.MONGODB_URI,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    (err) => {
-        if (err) return console.log("Error: ", err);
-        console.log("MongoDB Connection -- Ready state is:", mongoose.connection.readyState);
-    }
-);
+db.connect();
 
-const listener = app.listen(process.env.PORT || 3000, () => {
-    console.log('Your app is listening on port ' + listener.address().port)
-})
+var port;
+if(process.env.NODE_ENV !== 'test') {
+    port = process.env.PORT || 3000;
+}
+else {
+    port = 0;
+}
+
+const listener = app.listen(port, () => 
+    console.log('Your app is listening on port ' + listener.address().port)  
+)
 
 module.exports = app;
 

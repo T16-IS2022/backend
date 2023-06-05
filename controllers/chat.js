@@ -3,6 +3,8 @@ const Utente = require('../models/utente'); // get our mongoose model
 
 const crea_chat = async (req, res) => {
     const { id_annuncio, id_mittente, id_destinatario } = req.body;
+    
+    const userId = req.loggedUser.id;
 
     if (!userId)
 		return res.status(401).json({ 
@@ -10,6 +12,13 @@ const crea_chat = async (req, res) => {
             message: 'Utente non autorizzato.' 
         });
     
+
+    if (!id_annuncio || !id_mittente || !id_destinatario) {
+        return res.status(500).json({
+            code: 500,
+            message: "Internal server Error."
+        });
+    }
     let chat = await Chat.findOne({ annuncio: id_annuncio, utente: id_mittente, locatore: id_destinatario });
 
     if(chat)

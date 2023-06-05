@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
+const getToken = (data) => jwt.sign({ data }, process.env.SUPER_SECRET, { expiresIn: 86400 });
+
 const tokenChecker = async (req, res, next) => {
 	// header or url parameters or post parameters
 	var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -23,4 +25,7 @@ const tokenChecker = async (req, res, next) => {
 	});
 };
 
-module.exports = tokenChecker
+module.exports = {
+	getToken,
+	tokenChecker
+}

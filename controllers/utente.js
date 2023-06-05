@@ -247,7 +247,7 @@ const get_chat = async (req, res) => {
 }
 
 const modifica_profilo = async (req, res) => {
-	const userId = req.params.id; // ID dell'utente da modificare
+	const userId = req.loggedUser.id; // ID dell'utente da modificare
 	const { 
 		nome, 
 		cognome, 
@@ -292,7 +292,7 @@ const modifica_profilo = async (req, res) => {
 }
 
 const cancella_account = async (req, res) => {
-	const userId = req.params.id;
+	const userId = req.loggedUser.id;
 	let user = await Utente.findOne({ _id: userId }).exec().catch((err) => {
 		return res.status(500).json({ 
 			code: 500, 
@@ -304,7 +304,7 @@ const cancella_account = async (req, res) => {
 	Annuncio.deleteMany({ _id: { $in: user.annunci_pubblicati } }, (err) => {
 		if (err)
 			return res.status(500).json({
-				message: 'Errore durante la cancellazione degli annunci.' 
+				message: 'Internal server error.' 
 			});
 	});
 

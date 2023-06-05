@@ -5,7 +5,7 @@
     "title": "HouseFinder API",
     "description": "Lista degli endpoints dell'applicazione HouseFinder e informazioni sul loro utilizzo."
   },
-  "host": "housefinder-backend.vercel.app",
+  "host": "localhost:3000",
   "basePath": "/",
   "security": [
     {
@@ -42,7 +42,7 @@
     }
   ],
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
     "/utente/login": {
@@ -629,8 +629,8 @@
         }
       }
     },
-    "/ricerca/{filtri}": {
-      "get": {
+    "/ricerca": {
+      "post": {
         "summary": "Ricerca annunci",
         "description": "Ricerca annunci nel sistema",
         "operationId": "ricerca_annunci",
@@ -640,10 +640,11 @@
         "parameters": [
           {
             "name": "filtri",
-            "in": "path",
-            "description": "Filtri di ricerca",
-            "required": true,
-            "type": "string"
+            "in": "body",
+            "description": "Filtri ricerca",
+            "schema": {
+              "$ref": "#/definitions/ricerca_filtri"
+            }
           }
         ],
         "responses": {
@@ -943,9 +944,6 @@
     "filtro": {
       "type": "object",
       "properties": {
-        "nome_filtro": {
-          "type": "string"
-        },
         "min": {
           "type": "number"
         },
@@ -1137,6 +1135,32 @@
         },
         "messaggio": {
           "type": "string"
+        }
+      }
+    },
+    "ricerca_filtri": {
+      "type": "object",
+      "properties": {
+        "superficie_tot": {
+          "$ref": "#/definitions/filtro"
+        },
+        "numero_bagni": {
+          "$ref": "#/definitions/filtro"
+        },
+        "numero_locali": {
+          "$ref": "#/definitions/filtro"
+        },
+        "prezzo": {
+          "$ref": "#/definitions/filtro"
+        },
+        "classe_energetica": {
+          "type": "string"
+        },
+        "indirizzo": {
+          "type": "string"
+        },
+        "arredato": {
+          "type": "boolean"
         }
       }
     },

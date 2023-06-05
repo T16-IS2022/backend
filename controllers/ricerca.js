@@ -11,7 +11,7 @@ const ricerca_annunci = (req, res) => {
 		classe_energetica,
 		indirizzo,
 		arredato
-	} = req.query;
+	} = req.body;
 	const filtro = {};
 
 	/**

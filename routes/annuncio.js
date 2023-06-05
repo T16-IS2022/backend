@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const annuncioController = require('../controllers/annuncio');
-const tokenChecker = require('../middleware/tokenChecker');
+const { tokenChecker } = require('../middleware/tokenChecker');
 
 router.get('/annuncio/list', annuncioController.get_annunci);
 

@@ -24,7 +24,7 @@ const get_annunci = async (req, res) => {
 }
 
 // Restituisce un annuncio dato il suo id
-const get_annuncio = (req, res) => {
+const get_annuncio = async (req, res) => {
     Annuncio.findOne({ _id: req.params.id }, (err, data) => {
 		if (err)
             return res.status(500).json({ 
@@ -65,7 +65,20 @@ const salva_annuncio = async (req, res) => {
 				code: 409, 
 				message: 'Annuncio già presente negli annunci salvati.' 
 			});
-	
+		Annuncio.findOne({ _id: req.params.id }, (err, data) => {
+			if(err) {
+				return res.status(500).json({
+					code: 500,
+					message: 'Internal server error.'
+				});
+			}
+			if(!data) {
+				return res.status(404).json({
+					code: 404,
+					message: 'Annuncio non trovato.'
+				});
+			}
+		});
 		Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $push: { annunci_salvati: req.params.id } }, (err, data) => {
 			if (err)
 				return res.status(500).json({ 
@@ -106,7 +119,7 @@ const pubblica_annuncio = async (req, res) => {
 		classe_energetica, 
 		indirizzo, 
 		arredato,
-		durata_vetrina 
+		durata_vetrina
 	} = req.body;
 	var scadenza_vetrina = calcola_vetrina(durata_vetrina);
 

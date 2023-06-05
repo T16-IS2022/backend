@@ -4,9 +4,9 @@ const swaggerDocument = require('./swagger.json');
 const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css"
 
 function swaggerConfig(app) {
-    if(process.env.NODE_ENV != 'deploy') {
-        swaggerDocument.host = 'localhost:3000';
-        swaggerDocument.schemes = ['http'];
+    if(process.env.NODE_ENV === 'deploy') {
+        swaggerDocument.host = 'housefinder-backend.vercel.app';
+        swaggerDocument.schemes = ['https'];
     }
     app.use(
         '/api-docs', 
