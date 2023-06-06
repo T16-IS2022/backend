@@ -37,6 +37,9 @@ const invia_messaggio = async (req, res) => {
 			message: 'Chat inesistente.'
 		});
 	}
+	if(!chat.messaggi) {
+		chat.messaggi = [];
+	}
 	chat.messaggi.push(nuovoMessaggio._id);
 	await chat.save();
     return res.status(200).json({ 

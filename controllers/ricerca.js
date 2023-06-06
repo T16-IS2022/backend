@@ -146,6 +146,7 @@ const salva_ricerca = async (req, res) => {
 // Elimina una ricerca che era stata salvata
 const rimuovi_ricerca_salvata = async (req, res) => {
 	const { id } = req.params;
+
 	Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $pull: { ricerche_salvate: id } }, (err, data) => {
 		if (err)
 			return res.status(500).json({
