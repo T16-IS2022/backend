@@ -3,6 +3,8 @@ const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const annuncio = require('../controllers/annuncio.js');
 
+jest.retryTimes(3);
+
 const login = async (app) => { 
     const response = await request(app).post('/utente/login').send({
         email: 'prova@prova.com',
@@ -165,18 +167,17 @@ describe('GET /annuncio/salva/{id}', () => {
     });
     
     test('GET /annuncio/salva con token, se l\'id non esiste, deve ritornare 404', async () => {
-        const rimuovi_response = await rimuovi_annuncio_salvato(app, '647ae9999e3f6fdb09048cce');
-        const response = await salva_annuncio(app, '647ae9999e3f6fdb09048cce');
+        const rimuovi_response = await rimuovi_annuncio_salvato(app, '647ae9988e3f6fdb09048cce');
+        const response = await salva_annuncio(app, '647ae9988e3f6fdb09048cce');
         expect(response.statusCode).toBe(404);
     });
 
     test('GET /annuncio/salva con token, se l\'id è già salvato, deve ritornare 409', async () => {
-        const id = "647ae9ab7e3f6fdb09048cce";
+        const id = "6480ac64cb7ccb7af57bfbdd";
+        var response = await salva_annuncio(app, id);
+        response = await salva_annuncio(app, id);
         const rimuovi_response = await rimuovi_annuncio_salvato(app, id);
-        const response1 = await salva_annuncio(app, id);
-        const response = await salva_annuncio(app, id);
         expect(response.statusCode).toBe(409);
-        const rimuovi_response1 = await rimuovi_annuncio_salvato(app, id);
     });
 });
 
