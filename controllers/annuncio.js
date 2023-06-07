@@ -107,7 +107,6 @@ function calcola_vetrina(durata_vetrina) {
 
 // Aggiunge un annuncio nel database con i campi inseriti dall'utente
 const pubblica_annuncio = async (req, res) => {
-	//const userId = req.body.userId;
 	const { 
 		userId,
 		foto, 

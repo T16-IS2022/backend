@@ -247,7 +247,7 @@ const get_chat = async (req, res) => {
 }
 
 const modifica_profilo = async (req, res) => {
-	const userId = req.loggedUser.id; // ID dell'utente da modificare
+	const userId = req.params.id; // ID dell'utente da modificare
 	const { 
 		nome, 
 		cognome, 
@@ -272,19 +272,19 @@ const modifica_profilo = async (req, res) => {
 			utente.data_nascita = data_nascita || utente.data_nascita;
 			utente.numero_tel = numero_tel || utente.numero_tel;
 			utente.email = email || utente.email;
-			utente.password = hash(password) || utente.password;
+			utente.password = password || utente.password;
 
 			// Salva le modifiche
-			utente.save();
+			return utente.save();
 		})
 		.then(() => {
-			return res.status(200).json({ 
+			res.status(200).json({ 
 				code: 200, 
 				message: 'Modifica del profilo riuscita.' 
 			});
 		})
 		.catch((err) => {
-			return res.status(500).json({ 
+			res.status(500).json({ 
 				code: 500, 
 				message: 'Internal server error.' 
 			});
@@ -292,7 +292,7 @@ const modifica_profilo = async (req, res) => {
 }
 
 const cancella_account = async (req, res) => {
-	const userId = req.loggedUser.id;
+	const userId = req.params.id;
 	let user = await Utente.findOne({ _id: userId }).exec().catch((err) => {
 		return res.status(500).json({ 
 			code: 500, 
@@ -300,11 +300,18 @@ const cancella_account = async (req, res) => {
 		});
 	});
 
+	//controllo se l'utente esiste nel database
+	if(!user)
+		return res.status(404).json({ 
+			code: 404, 
+			message: "L'utente richiesto non esiste." 
+		});
+
 	//prima di cancellare un utente devo cancellare tutti gli annunci che ha pubblicato
 	Annuncio.deleteMany({ _id: { $in: user.annunci_pubblicati } }, (err) => {
 		if (err)
 			return res.status(500).json({
-				message: 'Internal server error.' 
+				message: 'Errore durante la cancellazione degli annunci.' 
 			});
 	});
 
@@ -313,12 +320,7 @@ const cancella_account = async (req, res) => {
 			return res.status(500).json({ 
 				code: 500, 
 				message: "Internal server error." 
-			});
-		else if (!data)
-			return res.status(404).json({ 
-				code: 404, 
-				message: "L'utente richiesto non esiste." 
-			});
+			});		
 		else
 			return res.status(200).json({ 
 				code: 200, 
