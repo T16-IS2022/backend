@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const chatController = require('../controllers/chat');
-const tokenChecker = require('../middleware/tokenChecker');
+const { tokenChecker } = require('../middleware/tokenChecker');
 
 router.post('/chat', tokenChecker, chatController.crea_chat);
 

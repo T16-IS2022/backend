@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 
+const getToken = (data) => jwt.sign({ data }, process.env.SUPER_SECRET, { expiresIn: 86400 });
 
 const tokenChecker = async (req, res, next) => {
     // header or url parameters or post parameters
@@ -24,5 +25,7 @@ const tokenChecker = async (req, res, next) => {
     });
 };
 
-
-module.exports = tokenChecker
+module.exports = {
+	getToken,
+	tokenChecker
+}

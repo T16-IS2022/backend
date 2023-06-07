@@ -45,43 +45,6 @@
     "http"
   ],
   "paths": {
-    "/utente/registrazione": {
-      "post": {
-        "summary": "Registrazione account",
-        "description": "Registra un nuovo utente",
-        "operationId": "signup",
-        "tags": [
-          "utente"
-        ],
-        "parameters": [
-          {
-            "name": "user",
-            "in": "body",
-            "description": "Credenziali da registrare",
-            "schema": {
-              "$ref": "#/definitions/credenziali_registrazione"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "schema":{
-              "$ref": "#/definitions/utente"
-            },
-            "description": "La registrazione è avvenuta con successo."
-          },
-          "400": {
-            "description": "L'input non è formattato correttamente."
-          },
-          "409": {
-            "description": "Indirizzo email già presente nel sistema."
-          },
-          "500": {
-            "description": "Internal server error."
-          }
-        }
-      }
-    },
     "/utente/login": {
       "post": {
         "summary": "Accesso account",
@@ -97,13 +60,16 @@
             "description": "Credenziali necessarie",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/credenziali_login"
+              "$ref": "#/definitions/login_credenziali"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "L'accesso è avvenuto correttamente."
+            "description": "L'accesso è avvenuto correttamente.",
+            "schema": {
+              "$ref": "#/definitions/login_return"
+            }
           },
           "400": {
             "description": "Alcuni parametri sono assenti."
@@ -120,11 +86,11 @@
         }
       }
     },
-    "/utente/modifica_profilo": {
+    "/utente/registrazione": {
       "post": {
-        "summary": "Registrazione account",
+        "summary": "Registrazione",
         "description": "Registra un nuovo utente",
-        "operationId": "signup",
+        "operationId": "registrazione",
         "tags": [
           "utente"
         ],
@@ -133,8 +99,9 @@
             "name": "user",
             "in": "body",
             "description": "Credenziali da registrare",
+            "required": true,
             "schema": {
-              "$ref": "#/definitions/credenziali_registrazione"
+              "$ref": "#/definitions/registrazione_credenziali"
             }
           }
         ],
@@ -154,6 +121,104 @@
         }
       }
     },
+    "/utente/{id}": {
+      "patch": {
+        "summary": "Modifica profilo",
+        "description": "Modifica le informazioni dell'account",
+        "operationId": "modifica_profilo",
+        "tags": [
+          "utente"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Credenziali da modificare",
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "description": "Credenziali da modificare",
+            "schema": {
+              "$ref": "#/definitions/registrazione_credenziali"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Modifica del profilo riuscita."
+          },
+          "404": {
+            "description": "Utente non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina profilo",
+        "description": "Elimina l'account",
+        "operationId": "cancella_account",
+        "tags": [
+          "utente"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Id utente",
+            "schema": {
+              "properties": {
+                "userId": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cancellazione del profilo riuscita."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/utente/recupero-password": {
+      "put": {
+        "summary": "Recupero password",
+        "description": "Recupero password utente",
+        "operationId": "recupero_password",
+        "tags": [
+          "utente"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "description": "Email account e password nuova",
+            "schema": {
+              "$ref": "#/definitions/login_credenziali"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password recuperata con successo."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
     "/utente/logout": {
       "get": {
         "tags": [
@@ -161,9 +226,146 @@
         ],
         "summary": "Logout",
         "description": "Effettua il logout",
+        "operationId": "logout",
         "responses": {
           "200": {
             "description": "Il logout è avvenuto correttamente"
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/utente/annunci-pubblicati": {
+      "get": {
+        "summary": "Annunci pubblicati",
+        "description": "Lista degli annunci pubblicati dall'utente",
+        "operationId": "get_annunci_pubblicati",
+        "tags": [
+          "utente"
+        ],
+        "responses": {
+          "200": {
+            "description": "Elenco degli annunci pubblicati ottenuto correttamente.",
+            "schema": {
+              "properties": {
+                "annunci": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/annuncio"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Utente non autorizzato."
+          },
+          "404": {
+            "description": "Utente non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/utente/annunci-salvati": {
+      "get": {
+        "summary": "Annunci salvati",
+        "description": "Lista degli annunci salvati dall'utente",
+        "operationId": "get_annunci_salvati",
+        "tags": [
+          "utente"
+        ],
+        "responses": {
+          "200": {
+            "description": "Elenco degli annunci salvati ottenuto correttamente.",
+            "schema": {
+              "properties": {
+                "annunci": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/annuncio"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Utente non autorizzato."
+          },
+          "404": {
+            "description": "Utente non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/utente/ricerche-salvate": {
+      "get": {
+        "summary": "Ricerche Salvate",
+        "description": "Lista delle ricerche salvate dall'utente",
+        "operationId": "get_ricerche_salvate",
+        "tags": [
+          "utente"
+        ],
+        "responses": {
+          "200": {
+            "description": "Elenco delle ricerche salvate ottenuto correttamente.",
+            "schema": {
+              "properties": {
+                "annunci": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ricerca"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Utente non autorizzato."
+          },
+          "404": {
+            "description": "Utente non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/utente/chat": {
+      "get": {
+        "summary": "Lista chat",
+        "description": "Lista delle chat dell'utente",
+        "operationId": "get_chat",
+        "tags": [
+          "utente"
+        ],
+        "responses": {
+          "200": {
+            "description": "Elenco delle chat ottenuto correttamente.",
+            "schema": {
+              "properties": {
+                "annunci": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/chat"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Utente non autorizzato."
+          },
+          "404": {
+            "description": "Utente non trovato."
           },
           "500": {
             "description": "Internal server error."
@@ -181,13 +383,20 @@
         ],
         "responses": {
           "200": {
-            "description": "La richiesta è stata eseguita con successo."
-          },
-          "400": {
-            "description": "L'input non è formattato correttamente."
+            "description": "La richiesta è stata eseguita con successo.",
+            "schema": {
+              "properties": {
+                "annunci": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/annuncio"
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Pagina non trovata."
+            "description": "Annunci non trovati."
           },
           "500": {
             "description": "Internal server error."
@@ -197,8 +406,8 @@
     },
     "/annuncio/{id}": {
       "get": {
-        "summary": "Lista annunci",
-        "description": "Restituisce la lista degli annunci della pagina principale",
+        "summary": "Visualizza annuncio",
+        "description": "Restituisce le informazioni di un annuncio",
         "operationId": "get_annuncio",
         "tags": [
           "annuncio"
@@ -214,13 +423,115 @@
         ],
         "responses": {
           "200": {
-            "description": "L'annuncio è stato restituito con successo."
-          },
-          "400": {
-            "description": "L'input non è formattato correttamente."
+            "description": "Annuncio ottenuto correttamente.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/annuncio"
+              }
+            }
           },
           "404": {
-            "description": "Pagina non trovata."
+            "description": "Annuncio non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "patch": {
+        "summary": "Modifica annuncio",
+        "description": "Modifica un annuncio pubblicato dall'utente",
+        "operationId": "modifica_annuncio",
+        "tags": [
+          "annuncio"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id dell'annuncio da modificare",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Dati annuncio",
+            "in": "body",
+            "description": "Dati dell'annuncio da modificare",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pubblica_annuncio"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Modifica dell'annuncio riuscita."
+          },
+          "404": {
+            "description": "Annuncio non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina annuncio",
+        "description": "Elimina un annuncio pubblicato dall'utente",
+        "operationId": "elimina_annuncio",
+        "tags": [
+          "annuncio"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id dell'annuncio da eliminare",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Annuncio eliminato con successo."
+          },
+          "404": {
+            "description": "Annuncio non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/annuncio": {
+      "post": {
+        "summary": "Pubblica annuncio",
+        "description": "Pubblica un annuncio",
+        "operationId": "pubblica_annuncio",
+        "tags": [
+          "annuncio"
+        ],
+        "parameters": [
+          {
+            "name": "annuncio",
+            "in": "body",
+            "description": "Annuncio da pubblicare",
+            "schema": {
+              "$ref": "#/definitions/pubblica_annuncio"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Annuncio creato con successo."
+          },
+          "400": {
+            "description": "Alcuni parametri sono assenti."
+          },
+          "401": {
+            "description": "Utente non autorizzato."
           },
           "500": {
             "description": "Internal server error."
@@ -247,7 +558,269 @@
         ],
         "responses": {
           "200": {
-            "description": "L'annuncio è stato salvato con successo."
+            "description": "Annuncio salvato con successo."
+          },
+          "404": {
+            "description": "Annuncio non trovato."
+          },
+          "409": {
+            "description": "Annuncio già presente negli annunci salvati."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Rimuovi annuncio salvato",
+        "description": "Rimuove un annuncio dalla lista degli annunci salvati",
+        "operationId": "rimuovi_annuncio_salvato",
+        "tags": [
+          "annuncio"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id annuncio",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Annuncio rimosso con successo."
+          },
+          "404": {
+            "description": "Annuncio non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/annuncio/pagamento": {
+      "post": {
+        "summary": "Pagamento",
+        "description": "Effettua il pagamento della vetrina di un annuncio",
+        "operationId": "pagamento",
+        "tags": [
+          "annuncio"
+        ],
+        "parameters": [
+          {
+            "name": "annuncio_id",
+            "in": "body",
+            "description": "Annuncio da pagare",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pagamento effettuato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/ricerca": {
+      "post": {
+        "summary": "Ricerca annunci",
+        "description": "Ricerca annunci nel sistema",
+        "operationId": "ricerca_annunci",
+        "tags": [
+          "ricerca"
+        ],
+        "parameters": [
+          {
+            "name": "filtri",
+            "in": "body",
+            "description": "Filtri ricerca",
+            "schema": {
+              "$ref": "#/definitions/ricerca_filtri"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Elenco degli annunci ottenuto correttamente.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/annuncio"
+              }
+            }
+          },
+          "404": {
+            "description": "Annunci non trovati."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/ricerca/salva": {
+      "post": {
+        "summary": "Salva ricerca",
+        "description": "Salva una ricerca",
+        "operationId": "salva_ricerca",
+        "tags": [
+          "ricerca"
+        ],
+        "parameters": [
+          {
+            "name": "parametri",
+            "in": "body",
+            "description": "Parametri ricerca",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ricerca_input"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ricerca salvata con successo."
+          },
+          "404": {
+            "description": "Utente non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/ricerca/salva/{id}": {
+      "delete": {
+        "summary": "Rimuovi ricerca salvata",
+        "description": "Rimuove una ricerca dalla lista delle ricerche salvate",
+        "operationId": "rimuovi_ricerca_salvata",
+        "tags": [
+          "ricerca"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id ricerca",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ricerca rimossa con successo."
+          },
+          "404": {
+            "description": "Utente non trovato."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/chat": {
+      "post": {
+        "summary": "Crea chat",
+        "description": "Crea una chat per l'annuncio",
+        "operationId": "crea_chat",
+        "tags": [
+          "chat"
+        ],
+        "parameters": [
+          {
+            "name": "parametri",
+            "in": "body",
+            "description": "Parametri chat",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/chat_crea_input"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Chat creata con successo."
+          },
+          "401": {
+            "description": "Utente non autorizzato."
+          },
+          "409": {
+            "description": "Chat già esistente."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/chat/{id}": {
+      "get": {
+        "summary": "Apri chat",
+        "description": "Apri una chat",
+        "operationId": "get_chat",
+        "tags": [
+          "chat"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id della chat",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat ottenuta correttamente."
+          },
+          "404": {
+            "description": "Chat non trovata."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/messaggio": {
+      "post": {
+        "summary": "Invia messaggio",
+        "description": "Invia un messaggio in una chat",
+        "operationId": "invia_messaggio",
+        "tags": [
+          "messaggio"
+        ],
+        "parameters": [
+          {
+            "name": "parametri",
+            "in": "body",
+            "description": "Parametri messaggio",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/messaggio_input"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messaggio inviato con successo."
+          },
+          "401": {
+            "description": "Utente non autorizzato."
+          },
+          "404": {
+            "description": "Chat inesistente."
           },
           "500": {
             "description": "Internal server error."
@@ -261,26 +834,6 @@
       "type": "string"
     },
     "utente": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "surname": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "numero_tel": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        }
-      }
-    },
-    "credenziali_registrazione": {
       "type": "object",
       "properties": {
         "nome": {
@@ -303,7 +856,163 @@
         }
       }
     },
-    "credenziali_login": {
+    "annuncio": {
+      "type": "object",
+      "properties": {
+        "creatore": {
+          "type": "string"
+        },
+        "foto": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "superficie_tot": {
+          "type": "number"
+        },
+        "numero_bagni": {
+          "type": "number"
+        },
+        "numero_locali": {
+          "type": "number"
+        },
+        "locali": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/locale"
+          }
+        },
+        "prezzo": {
+          "type": "number"
+        },
+        "classe_energetica": {
+          "type": "string"
+        },
+        "indirizzo": {
+          "type": "string"
+        },
+        "arredato": {
+          "type": "boolean"
+        },
+        "vetrina": {
+          "properties": {
+            "data_inizio": {
+              "$ref": "#/definitions/date"
+            },
+            "data_fine": {
+              "$ref": "#/definitions/date"
+            }
+          }
+        }
+      }
+    },
+    "locale": {
+      "type": "object",
+      "properties": {
+        "nome_locale": {
+          "type": "string"
+        },
+        "superficie": {
+          "type": "number"
+        },
+        "descrizione": {
+          "type": "string"
+        },
+        "arredamento": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ricerca": {
+      "type": "object",
+      "properties": {
+        "testo": {
+          "type": "string"
+        },
+        "filtri": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/filtro"
+          }
+        }
+      }
+    },
+    "filtro": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "chat": {
+      "type": "object",
+      "properties": {
+        "utente": {
+          "type": "object",
+          "$ref": "#/definitions/utente"
+        },
+        "locatore": {
+          "type": "object",
+          "$ref": "#/definitions/utente"
+        },
+        "messaggi": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/messaggio"
+          }
+        },
+        "annuncio": {
+          "type": "object",
+          "$ref": "#/definitions/annuncio"
+        }
+      }
+    },
+    "messaggio": {
+      "type": "object",
+      "properties": {
+        "messaggio": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/date"
+        },
+        "mittente": {
+          "type": "string"
+        }
+      }
+    },
+    "registrazione_credenziali": {
+      "type": "object",
+      "properties": {
+        "nome": {
+          "type": "string"
+        },
+        "cognome": {
+          "type": "string"
+        },
+        "data_nascita": {
+          "$ref": "#/definitions/date"
+        },
+        "numero_tel": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "login_credenziali": {
       "type": "object",
       "properties": {
         "email": {
@@ -311,6 +1020,147 @@
         },
         "password": {
           "type": "string"
+        }
+      }
+    },
+    "login_return": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "nome": {
+          "type": "string"
+        },
+        "cognome": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "pubblica_annuncio": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "foto": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "superficie_tot": {
+          "type": "number"
+        },
+        "numero_bagni": {
+          "type": "number"
+        },
+        "numero_locali": {
+          "type": "number"
+        },
+        "locali": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/locale"
+          }
+        },
+        "prezzo": {
+          "type": "number"
+        },
+        "classe_energetica": {
+          "type": "string"
+        },
+        "indirizzo": {
+          "type": "string"
+        },
+        "arredato": {
+          "type": "boolean"
+        },
+        "durata_vetrina": {
+          "type": "number"
+        }
+      }
+    },
+    "ricerca_input": {
+      "type": "object",
+      "properties": {
+        "superficie_tot": {
+          "type": "number"
+        },
+        "numero_bagni": {
+          "type": "number"
+        },
+        "numero_locali": {
+          "type": "number"
+        },
+        "prezzo": {
+          "type": "number"
+        },
+        "classe_energetica": {
+          "type": "string"
+        },
+        "indirizzo": {
+          "type": "string"
+        },
+        "arredato": {
+          "type": "boolean"
+        }
+      }
+    },
+    "chat_crea_input": {
+      "type": "object",
+      "properties": {
+        "id_annuncio": {
+          "type": "string"
+        },
+        "id_mittente": {
+          "type": "string"
+        },
+        "id_destinatario": {
+          "type": "string"
+        }
+      }
+    },
+    "messaggio_input": {
+      "type": "object",
+      "properties": {
+        "id_chat": {
+          "type": "string"
+        },
+        "messaggio": {
+          "type": "string"
+        }
+      }
+    },
+    "ricerca_filtri": {
+      "type": "object",
+      "properties": {
+        "superficie_tot": {
+          "$ref": "#/definitions/filtro"
+        },
+        "numero_bagni": {
+          "$ref": "#/definitions/filtro"
+        },
+        "numero_locali": {
+          "$ref": "#/definitions/filtro"
+        },
+        "prezzo": {
+          "$ref": "#/definitions/filtro"
+        },
+        "classe_energetica": {
+          "type": "string"
+        },
+        "indirizzo": {
+          "type": "string"
+        },
+        "arredato": {
+          "type": "boolean"
         }
       }
     },

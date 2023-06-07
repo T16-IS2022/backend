@@ -24,7 +24,7 @@ const get_annunci = async (req, res) => {
 }
 
 // Restituisce un annuncio dato il suo id
-const get_annuncio = (req, res) => {
+const get_annuncio = async (req, res) => {
     Annuncio.findOne({ _id: req.params.id }, (err, data) => {
 		if (err)
             return res.status(500).json({ 
@@ -65,7 +65,20 @@ const salva_annuncio = async (req, res) => {
 				code: 409, 
 				message: 'Annuncio già presente negli annunci salvati.' 
 			});
-	
+		Annuncio.findOne({ _id: req.params.id }, (err, data) => {
+			if(err) {
+				return res.status(500).json({
+					code: 500,
+					message: 'Internal server error.'
+				});
+			}
+			if(!data) {
+				return res.status(404).json({
+					code: 404,
+					message: 'Annuncio non trovato.'
+				});
+			}
+		});
 		Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $push: { annunci_salvati: req.params.id } }, (err, data) => {
 			if (err)
 				return res.status(500).json({ 
@@ -75,7 +88,7 @@ const salva_annuncio = async (req, res) => {
 			else if (!data)
 				return res.status(404).json({ 
 					code: 404, 
-					message: 'Utente non trovato.' 
+					message: 'Annuncio non trovato.' 
 				});
 			else
 				return res.status(200).json({ 
@@ -106,7 +119,7 @@ const pubblica_annuncio = async (req, res) => {
 		classe_energetica, 
 		indirizzo, 
 		arredato,
-		durata_vetrina 
+		durata_vetrina
 	} = req.body;
 	var scadenza_vetrina = calcola_vetrina(durata_vetrina);
 
@@ -204,16 +217,16 @@ const modifica_annuncio = async (req, res) => {
 		annuncio.vetrina = scadenza_vetrina ? vetrina : annuncio.vetrina;
     	
 		// Salva le modifiche
-    	return annuncio.save();
+    	annuncio.save();
     })
     .then(() => {
-    	res.status(200).json({ 
+    	return res.status(200).json({ 
 			code: 200, 
 			message: 'Modifica dell\'annuncio riuscita.' 
 		});
     })
     .catch((err) => {
-    	res.status(500).json({ 
+    	return res.status(500).json({ 
 			code: 500, 
 			message: 'Internal server error.' 
 		});
@@ -222,7 +235,7 @@ const modifica_annuncio = async (req, res) => {
 
 // Elimina un annuncio dal database dato il suo id
 const elimina_annuncio = (req, res) => {
-	const { id } = req.body;
+	const id = req.params.id;
     Annuncio.findOneAndDelete({ _id: id }, (err, data) => {
         if (err)
             return res.status(500).json({ 

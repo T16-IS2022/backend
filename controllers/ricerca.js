@@ -1,5 +1,6 @@
 const Utente = require('../models/utente');
 const Annuncio = require('../models/annuncio');
+const Ricerca = require('../models/ricerca');
 
 const ricerca_annunci = (req, res) => {
 	const {
@@ -10,7 +11,7 @@ const ricerca_annunci = (req, res) => {
 		classe_energetica,
 		indirizzo,
 		arredato
-	} = req.query;
+	} = req.body;
 	const filtro = {};
 
 	/**
@@ -108,7 +109,7 @@ const salva_ricerca = async (req, res) => {
 	};
 
 	// Rimuovi i parametri nulli o vuoti
-	Object.keys(filtro).forEach(key => filtro[key] == null && delete filtro[key]);
+	Object.keys(filtri).forEach(key => filtri[key] == null && delete filtri[key]);
 
 	const nuovaRicerca = new Ricerca({
 		testo: indirizzo,
@@ -145,6 +146,7 @@ const salva_ricerca = async (req, res) => {
 // Elimina una ricerca che era stata salvata
 const rimuovi_ricerca_salvata = async (req, res) => {
 	const { id } = req.params;
+
 	Utente.findOneAndUpdate({ _id: req.loggedUser.id }, { $pull: { ricerche_salvate: id } }, (err, data) => {
 		if (err)
 			return res.status(500).json({

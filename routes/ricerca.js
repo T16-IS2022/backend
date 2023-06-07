@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const ricercaController = require('../controllers/ricerca');
-const tokenChecker = require('../middleware/tokenChecker');
+const { tokenChecker } = require('../middleware/tokenChecker');
 
-router.get('/ricerca/:filtri', ricercaController.ricerca_annunci);
+router.post('/ricerca', ricercaController.ricerca_annunci);
 
 router.post('/ricerca/salva', tokenChecker, ricercaController.salva_ricerca);
 
