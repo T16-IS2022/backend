@@ -15,6 +15,8 @@ var token = getToken(payload);
 
 var method = '';
 
+const hash = (password) => crypto.createHash('sha256').update(password).digest('hex');
+
 describe('POST /utente/registrazione', () => {
   test('POST /utente/registrazione senza parametri deve ritornare 400', async () => {
     const response = await request(app).post('/utente/registrazione');
@@ -99,7 +101,7 @@ describe('PATCH /utente', () => {
     const reset = await request(app).patch(req)
       .send({
         nome: "Mario",
-        cognome: "Rosso",
+        cognome: "Rossi",
         data_nascita: "2002-05-11T00:00:00.000+00:00",
         numero_tel: "3425569854",
         email: "test@gmail.com",
@@ -118,6 +120,7 @@ describe('PATCH /utente', () => {
       var token = login_response.body.token;
       var delete_response = await request(app).delete('/utente/' + id).set('x-access-token', token);
     }
+
     const response = await request(app).post('/utente/registrazione').send({
       nome: "Prova",
       cognome: "Prova",

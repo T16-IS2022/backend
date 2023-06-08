@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1686157165505" clover="3.2.0">
-  <project timestamp="1686157165505" name="All files">
+<coverage generated="1686240202544" clover="3.2.0">
+  <project timestamp="1686240202545" name="All files">
     <metrics statements="456" coveredstatements="400" conditionals="198" coveredconditionals="140" methods="69" coveredmethods="59" elements="723" coveredelements="599" complexity="0" loc="456" ncloc="456" packages="5" files="21" classes="21"/>
     <package name="backend">
       <metrics statements="50" coveredstatements="47" conditionals="10" coveredconditionals="4" methods="6" coveredmethods="5"/>
-      <file name="db.js" path="/Users/rxfiu/Documents/housefinder/backend/db.js">
+      <file name="db.js" path="C:\Users\rafiu\Documents\housefinder\backend\db.js">
         <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="2" methods="3" coveredmethods="2"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -17,7 +17,7 @@
         <line num="17" count="5" type="stmt"/>
         <line num="19" count="5" type="stmt"/>
       </file>
-      <file name="index.js" path="/Users/rxfiu/Documents/housefinder/backend/index.js">
+      <file name="index.js" path="C:\Users\rafiu\Documents\housefinder\backend\index.js">
         <metrics statements="31" coveredstatements="30" conditionals="4" coveredconditionals="1" methods="2" coveredmethods="2"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -51,7 +51,7 @@
         <line num="44" count="5" type="stmt"/>
         <line num="47" count="5" type="stmt"/>
       </file>
-      <file name="swagger.js" path="/Users/rxfiu/Documents/housefinder/backend/swagger.js">
+      <file name="swagger.js" path="C:\Users\rafiu\Documents\housefinder\backend\swagger.js">
         <metrics statements="9" coveredstatements="7" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -66,7 +66,7 @@
     </package>
     <package name="backend.controllers">
       <metrics statements="310" coveredstatements="258" conditionals="181" coveredconditionals="130" methods="60" coveredmethods="51"/>
-      <file name="annuncio.js" path="/Users/rxfiu/Documents/housefinder/backend/controllers/annuncio.js">
+      <file name="annuncio.js" path="C:\Users\rafiu\Documents\housefinder\backend\controllers\annuncio.js">
         <metrics statements="99" coveredstatements="83" conditionals="68" coveredconditionals="52" methods="21" coveredmethods="20"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -107,28 +107,29 @@
         <line num="104" count="6" type="stmt"/>
         <line num="105" count="6" type="stmt"/>
         <line num="109" count="5" type="stmt"/>
+        <line num="122" count="5" type="stmt"/>
         <line num="123" count="5" type="stmt"/>
-        <line num="124" count="5" type="stmt"/>
-        <line num="126" count="5" type="cond" truecount="8" falsecount="0"/>
-        <line num="132" count="1" type="stmt"/>
-        <line num="136" count="4" type="cond" truecount="1" falsecount="1"/>
-        <line num="137" count="0" type="stmt"/>
-        <line num="142" count="4" type="stmt"/>
-        <line num="160" count="4" type="stmt"/>
-        <line num="161" count="4" type="cond" truecount="1" falsecount="1"/>
-        <line num="162" count="0" type="stmt"/>
+        <line num="125" count="5" type="cond" truecount="8" falsecount="0"/>
+        <line num="131" count="1" type="stmt"/>
+        <line num="135" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="141" count="4" type="stmt"/>
+        <line num="159" count="4" type="stmt"/>
+        <line num="160" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="161" count="0" type="stmt"/>
+        <line num="168" count="4" type="stmt"/>
         <line num="169" count="4" type="stmt"/>
         <line num="170" count="4" type="stmt"/>
         <line num="171" count="4" type="stmt"/>
-        <line num="172" count="4" type="stmt"/>
-        <line num="179" count="5" type="stmt"/>
-        <line num="180" count="1" type="stmt"/>
+        <line num="178" count="5" type="stmt"/>
+        <line num="179" count="1" type="stmt"/>
+        <line num="191" count="1" type="stmt"/>
         <line num="192" count="1" type="stmt"/>
         <line num="193" count="1" type="stmt"/>
-        <line num="194" count="1" type="stmt"/>
-        <line num="199" count="1" type="stmt"/>
-        <line num="201" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="202" count="0" type="stmt"/>
+        <line num="198" count="1" type="stmt"/>
+        <line num="200" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="201" count="0" type="stmt"/>
+        <line num="207" count="1" type="cond" truecount="2" falsecount="0"/>
         <line num="208" count="1" type="cond" truecount="2" falsecount="0"/>
         <line num="209" count="1" type="cond" truecount="2" falsecount="0"/>
         <line num="210" count="1" type="cond" truecount="2" falsecount="0"/>
@@ -137,38 +138,37 @@
         <line num="213" count="1" type="cond" truecount="2" falsecount="0"/>
         <line num="214" count="1" type="cond" truecount="2" falsecount="0"/>
         <line num="215" count="1" type="cond" truecount="2" falsecount="0"/>
-        <line num="216" count="1" type="cond" truecount="2" falsecount="0"/>
-        <line num="217" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="220" count="1" type="stmt"/>
-        <line num="223" count="1" type="stmt"/>
-        <line num="229" count="0" type="stmt"/>
+        <line num="216" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="219" count="1" type="stmt"/>
+        <line num="222" count="1" type="stmt"/>
+        <line num="228" count="0" type="stmt"/>
+        <line num="236" count="5" type="stmt"/>
         <line num="237" count="5" type="stmt"/>
         <line num="238" count="5" type="stmt"/>
-        <line num="239" count="5" type="stmt"/>
-        <line num="240" count="5" type="cond" truecount="1" falsecount="1"/>
-        <line num="241" count="0" type="stmt"/>
-        <line num="245" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="246" count="1" type="stmt"/>
-        <line num="252" count="4" type="stmt"/>
-        <line num="253" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="254" count="0" type="stmt"/>
-        <line num="259" count="4" type="stmt"/>
+        <line num="239" count="5" type="cond" truecount="1" falsecount="1"/>
+        <line num="240" count="0" type="stmt"/>
+        <line num="244" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="245" count="1" type="stmt"/>
+        <line num="251" count="4" type="stmt"/>
+        <line num="252" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="253" count="0" type="stmt"/>
+        <line num="258" count="4" type="stmt"/>
+        <line num="267" count="5" type="stmt"/>
         <line num="268" count="5" type="stmt"/>
         <line num="269" count="5" type="stmt"/>
-        <line num="270" count="5" type="stmt"/>
-        <line num="271" count="5" type="cond" truecount="1" falsecount="1"/>
-        <line num="272" count="0" type="stmt"/>
-        <line num="276" count="5" type="cond" truecount="1" falsecount="1"/>
-        <line num="277" count="0" type="stmt"/>
-        <line num="282" count="5" type="stmt"/>
-        <line num="289" count="5" type="stmt"/>
-        <line num="290" count="2" type="stmt"/>
-        <line num="292" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="293" count="1" type="stmt"/>
-        <line num="299" count="1" type="stmt"/>
-        <line num="305" count="5" type="stmt"/>
+        <line num="270" count="5" type="cond" truecount="1" falsecount="1"/>
+        <line num="271" count="0" type="stmt"/>
+        <line num="275" count="5" type="cond" truecount="1" falsecount="1"/>
+        <line num="276" count="0" type="stmt"/>
+        <line num="281" count="5" type="stmt"/>
+        <line num="288" count="5" type="stmt"/>
+        <line num="289" count="2" type="stmt"/>
+        <line num="291" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="292" count="1" type="stmt"/>
+        <line num="298" count="1" type="stmt"/>
+        <line num="304" count="5" type="stmt"/>
       </file>
-      <file name="chat.js" path="/Users/rxfiu/Documents/housefinder/backend/controllers/chat.js">
+      <file name="chat.js" path="C:\Users\rafiu\Documents\housefinder\backend\controllers\chat.js">
         <metrics statements="32" coveredstatements="29" conditionals="15" coveredconditionals="12" methods="4" coveredmethods="4"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -203,7 +203,7 @@
         <line num="75" count="1" type="stmt"/>
         <line num="83" count="5" type="stmt"/>
       </file>
-      <file name="messaggio.js" path="/Users/rxfiu/Documents/housefinder/backend/controllers/messaggio.js">
+      <file name="messaggio.js" path="C:\Users\rafiu\Documents\housefinder\backend\controllers\messaggio.js">
         <metrics statements="21" coveredstatements="18" conditionals="8" coveredconditionals="5" methods="2" coveredmethods="2"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -227,7 +227,7 @@
         <line num="45" count="1" type="stmt"/>
         <line num="51" count="5" type="stmt"/>
       </file>
-      <file name="ricerca.js" path="/Users/rxfiu/Documents/housefinder/backend/controllers/ricerca.js">
+      <file name="ricerca.js" path="C:\Users\rafiu\Documents\housefinder\backend\controllers\ricerca.js">
         <metrics statements="50" coveredstatements="37" conditionals="34" coveredconditionals="20" methods="8" coveredmethods="8"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -280,7 +280,7 @@
         <line num="162" count="3" type="stmt"/>
         <line num="169" count="5" type="stmt"/>
       </file>
-      <file name="utente.js" path="/Users/rxfiu/Documents/housefinder/backend/controllers/utente.js">
+      <file name="utente.js" path="C:\Users\rafiu\Documents\housefinder\backend\controllers\utente.js">
         <metrics statements="108" coveredstatements="91" conditionals="56" coveredconditionals="41" methods="25" coveredmethods="17"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -377,24 +377,24 @@
         <line num="295" count="3" type="stmt"/>
         <line num="296" count="3" type="stmt"/>
         <line num="297" count="0" type="stmt"/>
-        <line num="304" count="3" type="stmt"/>
-        <line num="305" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="306" count="0" type="stmt"/>
+        <line num="304" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="305" count="0" type="stmt"/>
         <line num="311" count="3" type="stmt"/>
         <line num="312" count="3" type="cond" truecount="1" falsecount="1"/>
         <line num="313" count="0" type="stmt"/>
-        <line num="317" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="318" count="0" type="stmt"/>
-        <line num="323" count="3" type="stmt"/>
-        <line num="330" count="5" type="stmt"/>
-        <line num="331" count="1" type="stmt"/>
-        <line num="335" count="1" type="stmt"/>
-        <line num="341" count="5" type="stmt"/>
+        <line num="318" count="3" type="stmt"/>
+        <line num="319" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="320" count="0" type="stmt"/>
+        <line num="325" count="3" type="stmt"/>
+        <line num="332" count="5" type="stmt"/>
+        <line num="333" count="1" type="stmt"/>
+        <line num="337" count="1" type="stmt"/>
+        <line num="343" count="5" type="stmt"/>
       </file>
     </package>
     <package name="backend.middleware">
       <metrics statements="12" coveredstatements="11" conditionals="7" coveredconditionals="6" methods="3" coveredmethods="3"/>
-      <file name="tokenChecker.js" path="/Users/rxfiu/Documents/housefinder/backend/middleware/tokenChecker.js">
+      <file name="tokenChecker.js" path="C:\Users\rafiu\Documents\housefinder\backend\middleware\tokenChecker.js">
         <metrics statements="12" coveredstatements="11" conditionals="7" coveredconditionals="6" methods="3" coveredmethods="3"/>
         <line num="1" count="5" type="stmt"/>
         <line num="3" count="5" type="stmt"/>
@@ -412,7 +412,7 @@
     </package>
     <package name="backend.models">
       <metrics statements="35" coveredstatements="35" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="annuncio.js" path="/Users/rxfiu/Documents/housefinder/backend/models/annuncio.js">
+      <file name="annuncio.js" path="C:\Users\rafiu\Documents\housefinder\backend\models\annuncio.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -421,7 +421,7 @@
         <line num="22" count="5" type="stmt"/>
         <line num="23" count="5" type="stmt"/>
       </file>
-      <file name="chat.js" path="/Users/rxfiu/Documents/housefinder/backend/models/chat.js">
+      <file name="chat.js" path="C:\Users\rafiu\Documents\housefinder\backend\models\chat.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -429,7 +429,7 @@
         <line num="11" count="5" type="stmt"/>
         <line num="12" count="5" type="stmt"/>
       </file>
-      <file name="filtro.js" path="/Users/rxfiu/Documents/housefinder/backend/models/filtro.js">
+      <file name="filtro.js" path="C:\Users\rafiu\Documents\housefinder\backend\models\filtro.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -437,14 +437,14 @@
         <line num="10" count="5" type="stmt"/>
         <line num="11" count="5" type="stmt"/>
       </file>
-      <file name="locale.js" path="/Users/rxfiu/Documents/housefinder/backend/models/locale.js">
+      <file name="locale.js" path="C:\Users\rafiu\Documents\housefinder\backend\models\locale.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="3" count="5" type="stmt"/>
         <line num="10" count="5" type="stmt"/>
         <line num="11" count="5" type="stmt"/>
       </file>
-      <file name="messaggio.js" path="/Users/rxfiu/Documents/housefinder/backend/models/messaggio.js">
+      <file name="messaggio.js" path="C:\Users\rafiu\Documents\housefinder\backend\models\messaggio.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -452,7 +452,7 @@
         <line num="10" count="5" type="stmt"/>
         <line num="11" count="5" type="stmt"/>
       </file>
-      <file name="ricerca.js" path="/Users/rxfiu/Documents/housefinder/backend/models/ricerca.js">
+      <file name="ricerca.js" path="C:\Users\rafiu\Documents\housefinder\backend\models\ricerca.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -460,7 +460,7 @@
         <line num="9" count="5" type="stmt"/>
         <line num="10" count="5" type="stmt"/>
       </file>
-      <file name="utente.js" path="/Users/rxfiu/Documents/housefinder/backend/models/utente.js">
+      <file name="utente.js" path="C:\Users\rafiu\Documents\housefinder\backend\models\utente.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -471,7 +471,7 @@
     </package>
     <package name="backend.routes">
       <metrics statements="49" coveredstatements="49" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="annuncio.js" path="/Users/rxfiu/Documents/housefinder/backend/routes/annuncio.js">
+      <file name="annuncio.js" path="C:\Users\rafiu\Documents\housefinder\backend\routes\annuncio.js">
         <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -487,7 +487,7 @@
         <line num="20" count="5" type="stmt"/>
         <line num="22" count="5" type="stmt"/>
       </file>
-      <file name="chat.js" path="/Users/rxfiu/Documents/housefinder/backend/routes/chat.js">
+      <file name="chat.js" path="C:\Users\rafiu\Documents\housefinder\backend\routes\chat.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -497,7 +497,7 @@
         <line num="8" count="5" type="stmt"/>
         <line num="10" count="5" type="stmt"/>
       </file>
-      <file name="messaggio.js" path="/Users/rxfiu/Documents/housefinder/backend/routes/messaggio.js">
+      <file name="messaggio.js" path="C:\Users\rafiu\Documents\housefinder\backend\routes\messaggio.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -506,7 +506,7 @@
         <line num="6" count="5" type="stmt"/>
         <line num="8" count="5" type="stmt"/>
       </file>
-      <file name="ricerca.js" path="/Users/rxfiu/Documents/housefinder/backend/routes/ricerca.js">
+      <file name="ricerca.js" path="C:\Users\rafiu\Documents\housefinder\backend\routes\ricerca.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -517,7 +517,7 @@
         <line num="10" count="5" type="stmt"/>
         <line num="12" count="5" type="stmt"/>
       </file>
-      <file name="utente.js" path="/Users/rxfiu/Documents/housefinder/backend/routes/utente.js">
+      <file name="utente.js" path="C:\Users\rafiu\Documents\housefinder\backend\routes\utente.js">
         <metrics statements="15" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="3" count="5" type="stmt"/>

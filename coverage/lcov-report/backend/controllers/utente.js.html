@@ -414,7 +414,9 @@
 <a name='L349'></a><a href='#L349'>349</a>
 <a name='L350'></a><a href='#L350'>350</a>
 <a name='L351'></a><a href='#L351'>351</a>
-<a name='L352'></a><a href='#L352'>352</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -718,6 +720,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -725,11 +734,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1014,7 +1018,7 @@ const get_chat = async (req, res) =&gt; {
 }
 &nbsp;
 const modifica_profilo = async (req, res) =&gt; {
-	const userId = req.loggedUser.id; // ID dell'utente da modificare
+	const userId = req.params.id; // ID dell'utente da modificare
 	const { 
 		nome, 
 		cognome, 
@@ -1039,19 +1043,19 @@ const modifica_profilo = async (req, res) =&gt; {
 			utente.data_nascita = data_nascita || <span class="branch-1 cbranch-no" title="branch not covered" >utente.data_nascita;</span>
 			utente.numero_tel = numero_tel || <span class="branch-1 cbranch-no" title="branch not covered" >utente.numero_tel;</span>
 			utente.email = email || <span class="branch-1 cbranch-no" title="branch not covered" >utente.email;</span>
-			utente.password = hash(password) || <span class="branch-1 cbranch-no" title="branch not covered" >utente.password;</span>
+			utente.password = password ? hash(password) : <span class="branch-1 cbranch-no" title="branch not covered" >utente.password;</span>
 &nbsp;
 			// Salva le modifiche
-			utente.save();
+			return utente.save();
 		})
 		.then(() =&gt; {
-			return res.status(200).json({ 
+			res.status(200).json({ 
 				code: 200, 
 				message: 'Modifica del profilo riuscita.' 
 			});
 		})
 		.catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
-<span class="cstat-no" title="statement not covered" >			return res.status(500).json({ </span>
+<span class="cstat-no" title="statement not covered" >			res.status(500).json({ </span>
 				code: 500, 
 				message: 'Internal server error.' 
 			});
@@ -1059,7 +1063,7 @@ const modifica_profilo = async (req, res) =&gt; {
 }
 &nbsp;
 const cancella_account = async (req, res) =&gt; {
-	const userId = req.loggedUser.id;
+	const userId = req.params.id;
 	let user = await Utente.findOne({ _id: userId }).exec().catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
 <span class="cstat-no" title="statement not covered" >		return res.status(500).json({ </span>
 			code: 500, 
@@ -1067,11 +1071,18 @@ const cancella_account = async (req, res) =&gt; {
 		});
 	});
 &nbsp;
+	//controllo se l'utente esiste nel database
+	<span class="missing-if-branch" title="if path not taken" >I</span>if(!user)
+<span class="cstat-no" title="statement not covered" >		return res.status(404).json({ </span>
+			code: 404, 
+			message: "L'utente richiesto non esiste." 
+		});
+&nbsp;
 	//prima di cancellare un utente devo cancellare tutti gli annunci che ha pubblicato
 	Annuncio.deleteMany({ _id: { $in: user.annunci_pubblicati } }, (err) =&gt; {
 		<span class="missing-if-branch" title="if path not taken" >I</span>if (err)
 <span class="cstat-no" title="statement not covered" >			return res.status(500).json({</span>
-				message: 'Internal server error.' 
+				message: 'Errore durante la cancellazione degli annunci.' 
 			});
 	});
 &nbsp;
@@ -1080,12 +1091,7 @@ const cancella_account = async (req, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >			return res.status(500).json({ </span>
 				code: 500, 
 				message: "Internal server error." 
-			});
-		else <span class="missing-if-branch" title="if path not taken" >I</span>if (!data)
-<span class="cstat-no" title="statement not covered" >			return res.status(404).json({ </span>
-				code: 404, 
-				message: "L'utente richiesto non esiste." 
-			});
+			});		
 		else
 			return res.status(200).json({ 
 				code: 200, 
@@ -1123,7 +1129,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-06-07T16:59:25.479Z
+                at 2023-06-08T16:03:22.513Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

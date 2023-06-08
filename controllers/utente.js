@@ -272,7 +272,7 @@ const modifica_profilo = async (req, res) => {
 			utente.data_nascita = data_nascita || utente.data_nascita;
 			utente.numero_tel = numero_tel || utente.numero_tel;
 			utente.email = email || utente.email;
-			utente.password = password || utente.password;
+			utente.password = password ? hash(password) : utente.password;
 
 			// Salva le modifiche
 			return utente.save();

@@ -5,6 +5,8 @@ const annuncio = require('../controllers/annuncio.js');
 
 jest.retryTimes(3);
 
+const hash = (password) => crypto.createHash('sha256').update(password).digest('hex');
+
 const login = async (app) => { 
     const response = await request(app).post('/utente/login').send({
         email: 'prova@prova.com',
