@@ -1,9 +1,12 @@
 # Ignore files related to API keys
 .env
+
+# Ignore files related to workspace settings
 .vscode
+.DS_Store
 
 # Ignore node_modules folder
-.DS_Store
+node_modules
 
 # Ignore coverage report
 coverage
