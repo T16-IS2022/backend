@@ -4,3 +4,6 @@
 
 # Ignore node_modules folder
 .DS_Store
+
+# Ignore coverage report
+coverage
