@@ -96,7 +96,7 @@ describe('POST /annuncio/list', () => {
 
 describe('GET /annuncio/{id}', () => {
     const route = '/annuncio'
-    const id_annuncio = '64764430af70311928f3f1df'
+    const id_annuncio = '6480ac64cb7ccb7af57bfbdd'
     test('GET /annuncio/{id} con token deve ritornare 200', async () => {
         const { token } = await login(app);
         const response = await request(app).get(route + '/' + id_annuncio)

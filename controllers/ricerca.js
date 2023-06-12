@@ -63,7 +63,7 @@ const ricerca_annunci = (req, res) => {
 		filtro.indirizzo = { $regex: indirizzo, $options: 'i' };
 
 	if (arredato)
-		filtro.arredato = arredato === 'true' ? true : false;
+		filtro.arredato = arredato;
 
 	Annuncio.find(filtro, (err, data) => {
 		if (err)
